@@ -13,21 +13,21 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('category_id');
-            $table->string('name');
-            $table->longText('description');
-            $table->text('short_description');
-            $table->decimal('price');
-            $table->string('pages_head')->nullable(); // string of id of head in each groups
-            $table->string('pages')->nullable(); // string of id
-            $table->string('slug')->unique();
-            $table->timestamps();
-            $table->foreign('category_id')
-                ->references('id')->on('categories');
-            $table->softDeletes();
-        });
+        // Schema::create('products', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->unsignedBigInteger('category_id');
+        //     $table->string('name');
+        //     $table->longText('description');
+        //     $table->text('short_description');
+        //     $table->decimal('price');
+        //     $table->string('pages_head')->nullable(); // string of id of head in each groups
+        //     $table->string('pages')->nullable(); // string of id
+        //     $table->string('slug')->unique();
+        //     $table->timestamps();
+        //     $table->foreign('category_id')
+        //         ->references('id')->on('categories');
+        //     $table->softDeletes();
+        // });
     }
 
     /**

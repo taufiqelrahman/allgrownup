@@ -13,15 +13,15 @@ class CreateStoryPagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('story_pages', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('filepath');
-            $table->enum('child_gender', ['boy', 'girl']);
-            $table->string('child_type')->nullable();
-            $table->boolean('dedication')->nullable();
-            $table->longText('options')->nullable();
-            $table->timestamps();
-        });
+        // Schema::create('story_pages', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->string('filepath');
+        //     $table->enum('child_gender', ['boy', 'girl']);
+        //     $table->string('child_type')->nullable();
+        //     $table->boolean('dedication')->nullable();
+        //     $table->longText('options')->nullable();
+        //     $table->timestamps();
+        // });
     }
 
     /**

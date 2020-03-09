@@ -13,18 +13,18 @@ class CreateCartItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cart_items', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('cart_id');
-            $table->unsignedBigInteger('product_id');
-            $table->integer('quantity');
-            $table->decimal('price');
-            $table->timestamps();
-            $table->foreign('cart_id')
-                ->references('id')->on('cart');
-            $table->foreign('product_id')
-                ->references('id')->on('products');
-        });
+        // Schema::create('cart_items', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->unsignedBigInteger('cart_id');
+        //     $table->unsignedBigInteger('product_id');
+        //     $table->integer('quantity');
+        //     $table->decimal('price');
+        //     $table->timestamps();
+        //     $table->foreign('cart_id')
+        //         ->references('id')->on('cart');
+        //     $table->foreign('product_id')
+        //         ->references('id')->on('products');
+        // });
     }
 
     /**

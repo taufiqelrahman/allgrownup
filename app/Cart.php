@@ -10,10 +10,10 @@ class Cart extends Model
 {
     use SoftDeletes;
     protected $table = 'cart';
-    protected $fillable = ['user_id'];
+    protected $fillable = ['user_id', 'checkout_id'];
     
-    public function cartItems()
-    {
-        return $this->hasMany('App\CartItem');
-    }
+    // public function cartItems()
+    // {
+    //     return $this->hasMany('App\CartItem');
+    // }
 }

@@ -19,9 +19,9 @@ class Order extends Model
     */
 
     use SoftDeletes;
-    protected $fillable = ['total', 'payment_type', 'shipping_method', 'shipping_rate'];
-    public function orderItems()
-    {
-        return $this->hasMany('App\OrderItem');
-    }
+    // protected $fillable = ['total', 'payment_type', 'shipping_method', 'shipping_rate'];
+    // public function orderItems()
+    // {
+    //     return $this->hasMany('App\OrderItem');
+    // }
 }
