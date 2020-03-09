@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Child extends Model
+class Testimonial extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['order_id', 'name', 'cover', 'gender', 'age', 'skin', 'hair', 'birthdate', 'message'];
+    protected $fillable = ['name', 'company', 'message', 'image_url'];
     //
 }
