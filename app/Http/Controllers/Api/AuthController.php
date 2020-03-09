@@ -6,11 +6,15 @@ use App\User;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Str;
 use Hash;
 
 class AuthController extends Controller
 {
-    public function register (Request $request) {
+    public function register (Request $request)
+    {
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -33,7 +37,8 @@ class AuthController extends Controller
     
     }
 
-    public function login (Request $request) {
+    public function login (Request $request)
+    {
 
         $user = User::where('email', $request->email)->first();
     
@@ -50,12 +55,71 @@ class AuthController extends Controller
     
         } else {
             $response = 'User does not exist';
-            return response($response, 422);
+            return response($response, 500);
         }
     
     }
 
-    public function logout (Request $request) {
+    public function forgotPassword (Request $request)
+    {
+
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $response = Password::broker()->sendResetLink($request->only('email'));
+            if ($response == Password::RESET_LINK_SENT) {
+                return response($response, 200);
+            } else {
+                return response($response, 500);
+            }
+    
+        } else {
+            $response = 'User does not exist';
+            return response($response, 500);
+        }
+    
+    }
+
+    /**
+     * Reset the given user's password.
+     *
+     * @param  \Illuminate\Contracts\Auth\CanResetPassword  $user
+     * @param  string  $password
+     * @return void
+     */
+    protected function reset($user, $password)
+    {
+        $user->password = Hash::make($password);
+        $user->setRememberToken(Str::random(60));
+        $user->save();
+        event(new PasswordReset($user));
+    }
+
+    public function resetPassword (Request $request)
+    {
+
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $data = $request->only('email', 'password', 'password_confirmation', 'token');
+            $response = Password::broker()->reset(
+                $data, function ($user, $password) {
+                    $this->reset($user, $password);
+                }
+            );
+            if ($response == Password::PASSWORD_RESET) {
+                return response($response, 200);
+            } else {
+                return response($response, 500);
+            }
+    
+        } else {
+            $response = 'User does not exist';
+            return response($response, 500);
+        }
+    
+    }
+
+    public function logout (Request $request)
+    {
 
         $token = $request->user()->token();
         $token->revoke();
