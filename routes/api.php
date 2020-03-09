@@ -24,6 +24,8 @@ Route::group(['middleware' => ['json.response']], function () {
     Route::post('/register', 'Api\AuthController@register')->name('register.api');
     Route::post('/forgot-password', 'Api\AuthController@forgotPassword')->name('forgot.password.api');
     Route::post('/reset-password', 'Api\AuthController@resetPassword')->name('reset.password.api');
+    
+    Route::get('/testimonials', 'Api\MasterController@testimonials')->name('testimonial.api');
 
     // private routes
     Route::middleware('auth:api')->group(function () {
