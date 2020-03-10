@@ -27,6 +27,7 @@ Route::group(['middleware' => ['json.response']], function () {
     
     Route::get('/testimonials', 'Api\MasterController@testimonials')->name('testimonial.api');
     Route::get('/occupations', 'Api\MasterController@occupations')->name('occupation.api');
+    Route::get('/book-pages', 'Api\MasterController@bookPages')->name('book.pages.api');
 
     // private routes
     Route::middleware('auth:api')->group(function () {

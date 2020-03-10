@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Child extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['order_id', 'name', 'cover', 'gender', 'age', 'skin', 'hair', 'birthdate', 'message'];
+    protected $fillable = [
+        'order_id',
+        'name',
+        'cover',
+        'gender',
+        'age',
+        'skin',
+        'hair',
+        'birthdate',
+        'message'
+    ];
     //
 }

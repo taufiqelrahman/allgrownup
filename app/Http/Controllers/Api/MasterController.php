@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Testimonial;
 use App\Occupation;
+use App\BookPage;
 
 class MasterController extends Controller
 {
@@ -29,5 +30,16 @@ class MasterController extends Controller
     {
         $occupations = Occupation::get();
         return response(['data' => $occupations], 200);
+    }
+
+    /**
+     * Display a listing of the book pages.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function bookPages()
+    {
+        $book_pages = BookPage::with('occupation')->with('bookContents')->get();
+        return response(['data' => $book_pages], 200);
     }
 }

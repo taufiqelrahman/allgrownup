@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Testimonial extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['name', 'company', 'message', 'image_url'];
+    protected $fillable = [
+        'name',
+        'company',
+        'message',
+        'image_url'
+    ];
     //
 }
