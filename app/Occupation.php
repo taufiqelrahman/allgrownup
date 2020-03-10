@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Occupation extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['name', 'description', 'page_count'];
+    protected $fillable = ['name', 'description', 'page_count', 'image_url'];
     //
 }
