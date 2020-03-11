@@ -16,7 +16,8 @@ class CreateBookContentsTable extends Migration
         Schema::create('book_contents', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('book_page_id');
-            $table->longText('value');
+            $table->longText('english');
+            $table->longText('indonesia');
             $table->string('style');
             $table->timestamps();
             $table->softDeletes();

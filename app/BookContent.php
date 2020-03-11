@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class BookContent extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['book_page_id', 'value', 'style'];
+    protected $fillable = ['book_page_id', 'english', 'indonesia', 'style'];
     //
 }
