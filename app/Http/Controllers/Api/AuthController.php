@@ -29,6 +29,8 @@ class AuthController extends Controller
     
         $request['password']=Hash::make($request['password']);
         $user = User::create($request->toArray());
+
+        // TODO: save phone to address table
     
         $token = $user->createToken('Laravel Password Grant Client')->accessToken;
         $response = ['token' => $token];
@@ -133,6 +135,13 @@ class AuthController extends Controller
     {
         $user = $request->user()->with('cart')->first();
         return response($user, 200);
+    
+    }
+
+    public function checkEmailExists (Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        return response(['exists' => isset($user)], 200);
     
     }
 }
