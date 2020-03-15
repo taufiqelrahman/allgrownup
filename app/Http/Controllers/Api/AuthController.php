@@ -128,4 +128,11 @@ class AuthController extends Controller
         return response($response, 200);
     
     }
+
+    public function me (Request $request)
+    {
+        $user = $request->user()->with('cart')->first();
+        return response($user, 200);
+    
+    }
 }

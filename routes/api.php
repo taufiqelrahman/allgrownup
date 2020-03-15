@@ -32,6 +32,7 @@ Route::group(['middleware' => ['json.response']], function () {
     // private routes
     Route::middleware('auth:api')->group(function () {
         Route::get('/logout', 'Api\AuthController@logout')->name('logout');
+        Route::get('/me', 'Api\AuthController@me')->name('me');
         
         Route::get('/cart', 'Api\CartController@index')->name('cart.index');
         Route::post('/cart', 'Api\CartController@addItem')->name('cart.add');
@@ -41,7 +42,6 @@ Route::group(['middleware' => ['json.response']], function () {
 
         Route::apiResources(['orders' => 'Api\OrderController']);
         Route::get('orders/{order_number}/detail', 'Api\OrderController@showDetail')->name('order.showDetail');
-        
     });
 
     Route::get('products/{slug}/slug', 'Api\ProductController@showSlug')->name('product.showSlug');

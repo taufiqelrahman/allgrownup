@@ -53,4 +53,9 @@ class User extends Authenticatable
         // $this->notify(new ResetPasswordNotification($token));
         Mail::to($this)->queue(new PasswordReset($token, $this->email));
     }
+
+    public function cart()
+    {
+        return $this->hasOne('App\Cart');
+    }
 }
