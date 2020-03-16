@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\User;
+use App\Cart;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -29,6 +30,7 @@ class AuthController extends Controller
     
         $request['password']=Hash::make($request['password']);
         $user = User::create($request->toArray());
+        $cart = Cart::create([ 'user_id' => $user->id, 'checkout_id' => $request->checkoutId]);
 
         $token = $user->createToken('Laravel Password Grant Client')->accessToken;
         $response = ['token' => $token];
@@ -131,7 +133,8 @@ class AuthController extends Controller
 
     public function me (Request $request)
     {
-        $user = $request->user()->with('cart')->first();
+        $userId = $request->user()->id;
+        $user = User::with('cart')->findOrFail($userId);
         return response($user, 200);
     
     }
