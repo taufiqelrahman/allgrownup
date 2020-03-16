@@ -113,10 +113,11 @@ class OrderController extends Controller
 
     public function showDetail($order_number)
     {
-        $order = Order::where('order_number', $order_number)->with('orderItems')->first();
-        $order->midtrans_status = app(MidtransController::class)->getTransaction($order_number);
-        return response(
-            ['data' => $order], 200);
+        $order = Order::where('order_number', $order_number);
+        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
+        // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
+        
+        return response(['data' => $data], 200);
     }
 
     /**

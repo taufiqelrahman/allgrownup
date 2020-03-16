@@ -19,7 +19,7 @@ class Order extends Model
     */
 
     use SoftDeletes;
-    // protected $fillable = ['total', 'payment_type', 'shipping_method', 'shipping_rate'];
+    protected $fillable = ['shopify_order_id', 'order_number', 'status'];
     // public function orderItems()
     // {
     //     return $this->hasMany('App\OrderItem');
