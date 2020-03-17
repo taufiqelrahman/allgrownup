@@ -15,15 +15,6 @@ use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
-    protected $guzzle;
-    public function __construct()
-    {
-        $this->guzzle = new \GuzzleHttp\Client([
-            'base_uri' => 'https://elrahman.myshopify.com',
-            'headers' => ['X-Shopify-Access-Token' => '944c15a82bd703a3483a6ba91ea6c6e4'],
-        ]);
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -31,14 +22,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        // $orders = Order::where('user_id', $request->user()->id)->get();
-        $data = array();
-        // foreach($orders as $order)
-        // {
-            // $response = $client->get('https://elrahman.myshopify.com/admin/api/2019-10/orders/' . $order->id . '.json');
-            $response = $this->guzzle->get('/admin/api/2019-10/orders/1927926055052.json');
-            array_push($data, json_decode($response->getBody()->getContents())->order);
-        // }
+        $data = app(ServiceController::class)->retrieveOrders()->orders;
         return response(['data' => $data], 200);
     }
 
