@@ -25,16 +25,14 @@ class CreateOrdersTable extends Migration
             // $table->string('shipping_method');
             // $table->decimal('shipping_rate');
             // $table->string('pages'); // string of id
-            // $table->string('child_name')->nullable();
-            // $table->enum('child_gender', ['boy', 'girl']);
-            // $table->string('child_type')->nullable();
-            // $table->enum('book_format', ['hard', 'soft']);
-            // $table->string('message')->nullable();
-            $table->tinyInteger('status');
+            // $table->tinyInteger('status');
+            $table->unsignedBigInteger('state_id');
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')
                 ->references('id')->on('users');
+            $table->foreign('state_id')
+                ->references('id')->on('states');
             // $table->foreign('address_id')
             //     ->references('id')->on('addresses');
         });

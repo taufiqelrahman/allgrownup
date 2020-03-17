@@ -113,8 +113,9 @@ class OrderController extends Controller
 
     public function showDetail($order_number)
     {
-        $order = Order::where('order_number', $order_number);
-        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
+        $order = Order::where('order_number', $order_number)->with('state')->first();
+        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id)->order;
+        $data->state = $order->state;
         // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
         
         return response(['data' => $data], 200);
