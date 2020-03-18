@@ -43,6 +43,7 @@ Route::group(['middleware' => ['json.response']], function () {
 
         Route::apiResources(['orders' => 'Api\OrderController']);
         Route::get('orders/{order_number}/detail', 'Api\OrderController@showDetail')->name('order.showDetail');
+        Route::get('orders/{checkout_id}/checkout', 'Api\OrderController@showCheckout')->name('order.showCheckout');
     });
 
     Route::get('products/{slug}/slug', 'Api\ProductController@showSlug')->name('product.showSlug');

@@ -22,7 +22,8 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $data = app(ServiceController::class)->retrieveOrders()->orders;
+        $data = app(ServiceController::class)->retrieveOrders();
+        $data->checkouts = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
         return response(['data' => $data], 200);
     }
 
@@ -95,14 +96,39 @@ class OrderController extends Controller
         return response(['data' => $order], 200);
     }
 
+    /**
+     * Display the specified order.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function showDetail($order_number)
     {
         $order = Order::where('order_number', $order_number)->with('state')->first();
-        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id)->order;
+        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
+        $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
+        $data->transaction = last($transactions);
+        $data->payment = app(MidtransController::class)->getTransaction($data->transaction->authorization);
         $data->state = $order->state;
         // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
         
         return response(['data' => $data], 200);
+    }
+
+    /**
+     * Display the specified abandoned checkouot.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showCheckout($checkout_id)
+    {
+        $data = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
+        $checkout = collect($data)->first(function ($value, $key) use ($checkout_id) {
+            return $value->id == $checkout_id;
+        });
+        
+        return response(['data' => $checkout], 200);
     }
 
     /**

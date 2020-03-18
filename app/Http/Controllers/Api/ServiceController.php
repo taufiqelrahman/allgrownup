@@ -23,15 +23,29 @@ class ServiceController extends Controller
   //   return json_decode($response->getBody()->getContents());
   // }
 
+  public function retrieveAbandonedCheckouts()
+  {
+    $response = $this->guzzle->get($this->ADMIN_API_PATH.'/checkouts.json');
+    return json_decode($response->getBody()->getContents());
+  }
+
   public function retrieveOrders()
   {
-    $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders.json');
+    $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders.json', [
+      'query' => ['status' => 'any']
+    ]);
     return json_decode($response->getBody()->getContents());
   }
 
   public function retrieveOrderById($id)
   {
     $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders/'.$id.'.json');
+    return json_decode($response->getBody()->getContents());
+  }
+
+  public function retrieveTransactionById($id)
+  {
+    $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders/'.$id.'/transactions.json');
     return json_decode($response->getBody()->getContents());
   }
 }
