@@ -13,8 +13,8 @@ class State extends Model
     2: pending (menunggu pembayaran: pending)
     3: paid (telah dibayar: settlement, capture)
     4: sent (telah dikirim, shipping_number terisi)
-    5: expired (expire)
-    // received (telah diterima) (need create auto-receive job)
+    5: done (selesai) (need create auto-done job based-on time)
+    6: expired (expire)
     // canceled (dibatalkan /gagal)
     */
     use SoftDeletes;
