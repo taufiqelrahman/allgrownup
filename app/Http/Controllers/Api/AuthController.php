@@ -134,7 +134,7 @@ class AuthController extends Controller
     public function me (Request $request)
     {
         $userId = $request->user()->id;
-        $user = User::with('cart')->findOrFail($userId);
+        $user = User::with('cart')->with('address')->findOrFail($userId);
         return response($user, 200);
     
     }

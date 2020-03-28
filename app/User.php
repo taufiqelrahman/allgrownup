@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Cart');
     }
+
+    public function address()
+    {
+        return $this->belongsTo('App\Address');
+    }
 }
