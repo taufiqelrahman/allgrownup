@@ -52,6 +52,8 @@ Route::group(['middleware' => ['json.response']], function () {
         'products' => 'Api\ProductController',
     ]);
 
-    Route::post('webhook', 'Api\WebhookController@handle');
-
+    Route::post('webhook/orders/create', 'Api\WebhookController@ordersCreate');
+    Route::post('webhook/orders/paid', 'Api\WebhookController@ordersPaid');
+    Route::post('webhook/orders/sent', 'Api\WebhookController@ordersSent');
+    Route::post('webhook/orders/cancelled', 'Api\WebhookController@ordersCancelled');
 });

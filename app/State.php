@@ -9,13 +9,12 @@ class State extends Model
 {
     /*
     STATE MACHINE
-    1: created (menunggu tipe pembayaran)
-    2: pending (menunggu pembayaran: pending)
-    3: paid (telah dibayar: settlement, capture)
-    4: sent (telah dikirim, shipping_number terisi)
-    5: done (selesai) (need create auto-done job based-on time)
-    6: expired (expire)
-    // canceled (dibatalkan /gagal)
+    1: created (menunggu pembayaran: pending)
+    2: paid (telah dibayar: settlement, capture)
+    3: sent (telah dikirim, shipping_number terisi)
+    4: done (selesai) (need create auto-done job based-on time)
+    5: expired (expire)
+    6: cancelled (dibatalkan /gagal)
     */
     use SoftDeletes;
     protected $fillable = ['name'];

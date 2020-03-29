@@ -132,38 +132,102 @@ class OrderController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * [Webhook] Create the resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function webhookCreate(Request $request)
     {
         $response = \DB::transaction(function() use ($request) {
-            $order = Order::where('order_number', $request->order_id)->first();
-            switch($request->transaction_status)
+            $user = User::with('address')->where('email', $request->email)->firstOrFail();
+            // save address
+            if (isset($user->address))
             {
-                case 'pending';
-                    $order->status = 2;
-                    $order->payment_type = $request->payment_type;
-                    break;
-                case 'settlement';
-                case 'capture';
-                    $order->status = 3;
-                    break;
-                case 'sent';
-                    $order->status = 4;
-                    $order->shipping_number = $request->shipping_number;
-                    break;
-                case 'expire';
-                    $order->status = 5;
-                    break;
-                default;
-                    break;
+                $address = $user->address;
+            } else {
+                $address = new Address;
             }
+            $address->fill($request->shipping_address);
+            $unallowed_props = ['company', 'latitude', 'longitude', 'name', 'country_code', 'province_code'];
+            foreach ($address as $key => $value) {
+                if (!in_array($key, $unallowed_props)) {
+                    unset($address->$key);
+                }
+            }
+            $address->save();
+            $user->address_id = $address->id;
+            $user->save();
+            // save order
+            $order = new Order;
+            $order->shopify_order_id = $request->id;
+            $order->user_id = $user->id;
+            $order->state_id = 1;
+            $order->order_number = str_replace('#', '', $request->name);
             $order->save();
-            return response(['data' => $order->with('orderItems')->findOrFail($order->id)], 200);
+            // delete cart
+            $cart = Cart::where('user_id', $user->id)->firstOrFail();
+            $cart->delete();
+            Mail::to($request->user())->queue(new OrderCreated($order));
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookPaid(Request $request)
+    {
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('order_number', 'WIGU'.$request->order_number)->firstOrFail();
+            $order->status = 2;
+            $order->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookSent(Request $request)
+    {
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('order_number', 'WIGU'.$request->order_number)->firstOrFail();
+            $order->status = 3;
+            $order->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookCancelled(Request $request)
+    {
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('order_number', 'WIGU'.$request->order_number)->firstOrFail();
+            $order->status = 6;
+            $order->save();
+            return response(['data' => $order], 200);
         }, 5);
 
         return $response;
