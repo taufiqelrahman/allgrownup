@@ -140,6 +140,7 @@ class OrderController extends Controller
      */
     public function webhookCreate(Request $request)
     {
+        $request = json_decode($request->getContent());
         $response = \DB::transaction(function() use ($request) {
             $user = User::with('address')->where('email', $request->email)->firstOrFail();
             // save address
@@ -149,13 +150,14 @@ class OrderController extends Controller
             } else {
                 $address = new Address;
             }
-            $address->fill($request->shipping_address);
+            $shippingAddress = $request->shipping_address;
             $unallowed_props = ['company', 'latitude', 'longitude', 'name', 'country_code', 'province_code'];
-            foreach ($address as $key => $value) {
-                if (!in_array($key, $unallowed_props)) {
-                    unset($address->$key);
+            foreach ($shippingAddress as $key => $value) {
+                if (in_array($key, $unallowed_props)) {
+                    unset($shippingAddress->$key);
                 }
             }
+            $address->fill((array) $shippingAddress);
             $address->save();
             $user->address_id = $address->id;
             $user->save();
@@ -169,7 +171,7 @@ class OrderController extends Controller
             // delete cart
             $cart = Cart::where('user_id', $user->id)->firstOrFail();
             $cart->delete();
-            Mail::to($request->user())->queue(new OrderCreated($order));
+            // Mail::to($user)->queue(new OrderCreated($order));
             return response(['data' => $order], 200);
         }, 5);
 
@@ -185,9 +187,10 @@ class OrderController extends Controller
      */
     public function webhookPaid(Request $request)
     {
+        $request = json_decode($request->getContent());
         $response = \DB::transaction(function() use ($request) {
-            $order = Order::where('order_number', 'WIGU'.$request->order_number)->firstOrFail();
-            $order->status = 2;
+            $order = Order::where('order_number', 'WIGU-'.$request->order_number)->firstOrFail();
+            $order->state_id = 2;
             $order->save();
             return response(['data' => $order], 200);
         }, 5);
@@ -204,9 +207,10 @@ class OrderController extends Controller
      */
     public function webhookSent(Request $request)
     {
+        $request = json_decode($request->getContent());
         $response = \DB::transaction(function() use ($request) {
-            $order = Order::where('order_number', 'WIGU'.$request->order_number)->firstOrFail();
-            $order->status = 3;
+            $order = Order::where('order_number', 'WIGU-'.$request->order_number)->firstOrFail();
+            $order->state_id = 3;
             $order->save();
             return response(['data' => $order], 200);
         }, 5);
@@ -223,9 +227,34 @@ class OrderController extends Controller
      */
     public function webhookCancelled(Request $request)
     {
+        $request = json_decode($request->getContent());
         $response = \DB::transaction(function() use ($request) {
-            $order = Order::where('order_number', 'WIGU'.$request->order_number)->firstOrFail();
-            $order->status = 6;
+            $order = Order::where('shopify_order_id', $request->id)->firstOrFail();
+            $order->state_id = 6;
+            $order->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookRefunded(Request $request)
+    {
+        $request = json_decode($request->getContent());
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('shopify_order_id', $request->id)->firstOrFail();
+            if ($request->financial_status == 'partially_refunded') {
+                $order->state_id = 7;
+            } else {
+                $order->state_id = 8;
+            }
             $order->save();
             return response(['data' => $order], 200);
         }, 5);

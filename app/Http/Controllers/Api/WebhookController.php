@@ -26,4 +26,9 @@ class WebhookController extends Controller
     {  
         return app(OrderController::class)->webhookCancelled($request);
     }
+
+    public function ordersRefunded(Request $request)
+    {  
+        return app(OrderController::class)->webhookRefunded($request);
+    }
 }

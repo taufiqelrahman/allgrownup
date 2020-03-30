@@ -15,6 +15,8 @@ class State extends Model
     4: done (selesai) (need create auto-done job based-on time)
     5: expired (expire)
     6: cancelled (dibatalkan /gagal)
+    7: partially-refunded (dikembalikan separuh)
+    8: refunded (dikembalikan)
     */
     use SoftDeletes;
     protected $fillable = ['name'];

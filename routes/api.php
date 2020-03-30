@@ -56,4 +56,5 @@ Route::group(['middleware' => ['json.response']], function () {
     Route::post('webhook/orders/paid', 'Api\WebhookController@ordersPaid');
     Route::post('webhook/orders/sent', 'Api\WebhookController@ordersSent');
     Route::post('webhook/orders/cancelled', 'Api\WebhookController@ordersCancelled');
+    Route::post('webhook/orders/refunded', 'Api\WebhookController@ordersRefunded');
 });
