@@ -23,7 +23,8 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $data = app(ServiceController::class)->retrieveOrders();
-        $data->checkouts = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
+        $data->order_states = Order::with('state')->get();
+        // $data->checkouts = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
         return response(['data' => $data], 200);
     }
 
