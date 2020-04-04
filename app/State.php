@@ -12,7 +12,7 @@ class State extends Model
     1: created (menunggu pembayaran: pending)
     2: paid (telah dibayar: settlement, capture)
     3: sent (telah dikirim, shipping_number terisi)
-    4: done (selesai) (need create auto-done job based-on time)
+    // 4: done (selesai) (need create auto-done job based-on time)
     5: expired (expire)
     6: cancelled (dibatalkan /gagal)
     7: partially-refunded (dikembalikan separuh)

@@ -139,6 +139,18 @@ class AuthController extends Controller
     
     }
 
+    public function updateMe (Request $request)
+    {
+        $userId = $request->user()->id;
+        $user = User::with('cart')->with('address')->findOrFail($userId);
+        if (isset($request->name)) {
+            $user->name = $request->name;
+        }
+        $user->save();
+        return response($user, 200);
+    
+    }
+
     public function checkEmailExists (Request $request)
     {
         $user = User::where('email', $request->email)->first();

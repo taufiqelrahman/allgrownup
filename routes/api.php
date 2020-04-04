@@ -34,6 +34,7 @@ Route::group(['middleware' => ['json.response']], function () {
     Route::middleware('auth:api')->group(function () {
         Route::get('/logout', 'Api\AuthController@logout')->name('logout');
         Route::get('/me', 'Api\AuthController@me')->name('me');
+        Route::post('/me', 'Api\AuthController@updateMe')->name('update.me');
         
         Route::post('/cart', 'Api\CartController@createCart')->name('cart.create');
         Route::get('/cart', 'Api\CartController@index')->name('cart.index');
