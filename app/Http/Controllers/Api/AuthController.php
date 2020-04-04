@@ -146,6 +146,9 @@ class AuthController extends Controller
         if (isset($request->name)) {
             $user->name = $request->name;
         }
+        if (isset($request->email)) {
+            $user->email = $request->email;
+        }
         $user->save();
         return response($user, 200);
     
@@ -154,7 +157,13 @@ class AuthController extends Controller
     public function checkEmailExists (Request $request)
     {
         $user = User::where('email', $request->email)->first();
-        return response(['exists' => isset($user)], 200);
+        $exists = isset($user);
+        if ($exists && null !== $request->user()) {
+            if ($request->user()->email == $user->email) {
+                $exists = false;
+            }
+        }
+        return response(['exists' => $exists], 200);
     
     }
 }
