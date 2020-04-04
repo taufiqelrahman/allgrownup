@@ -25,6 +25,7 @@ Route::group(['middleware' => ['json.response']], function () {
     Route::post('/check-email', 'Api\AuthController@checkEmailExists')->name('check.email.api');
     Route::post('/forgot-password', 'Api\AuthController@forgotPassword')->name('forgot.password.api');
     Route::post('/reset-password', 'Api\AuthController@resetPassword')->name('reset.password.api');
+    Route::get('/confirm-email-change', 'Api\AuthController@confirmEmailChange')->name('email.change.api');
     
     Route::get('/testimonials', 'Api\MasterController@testimonials')->name('testimonial.api');
     Route::get('/occupations', 'Api\MasterController@occupations')->name('occupation.api');

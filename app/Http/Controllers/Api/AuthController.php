@@ -147,7 +147,9 @@ class AuthController extends Controller
             $user->name = $request->name;
         }
         if (isset($request->email)) {
-            $user->email = $request->email;
+            // TODO
+            // generate token and save to EmailChange
+            // then email token to user with url to '/confirm-email-change'
         }
         $user->save();
         return response($user, 200);
@@ -164,6 +166,17 @@ class AuthController extends Controller
             }
         }
         return response(['exists' => $exists], 200);
+    
+    }
+
+    public function confirmEmailChange (Request $request)
+    {
+        // TODO
+        // $emailChange = EmailChange::where('token', $request->token)->first();
+        // $user = User::findOrFail($emailChange->user_id);
+        // $user->email = $emailChange->email;
+        // $user->save();
+        // return Redirect::to(env('CLIENT_URL').'/account?toast=email-changed');
     
     }
 }
