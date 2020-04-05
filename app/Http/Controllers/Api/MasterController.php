@@ -42,4 +42,15 @@ class MasterController extends Controller
         $book_pages = BookPage::with('occupation')->with('bookContents')->get();
         return response(['data' => $book_pages], 200);
     }
+
+    /**
+     * Display a listing of the provinces.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function provinces()
+    {
+        $data = app(ServiceController::class)->retrieveProvinces()->provinces;
+        return response(['data' => $data], 200);
+    }
 }

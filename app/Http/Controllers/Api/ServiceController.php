@@ -48,4 +48,10 @@ class ServiceController extends Controller
     $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders/'.$id.'/transactions.json');
     return json_decode($response->getBody()->getContents());
   }
+
+  public function retrieveProvinces()
+  {
+    $response = $this->guzzle->get($this->ADMIN_API_PATH.'/countries/244359069829/provinces.json');
+    return json_decode($response->getBody()->getContents());
+  }
 }
