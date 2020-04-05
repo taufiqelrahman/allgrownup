@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use App\Cart;
+use App\Address;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -160,7 +161,25 @@ class AuthController extends Controller
             ]);
             $user->update(['password'=> Hash::make($request->newPassword)]);
         }
+        if (isset($request->address1)
+            || isset($request->address2)
+            || isset($request->city)
+            || isset($request->province)
+            || isset($request->zip)) {
+            if (isset($user->address_id)) {
+                $address = Address::findOrFail($user->address_id);
+                $address->fill((array) json_decode($request->getContent()));
+                $address->save();
+            } else {
+                $address = new Address;
+                $address->fill((array) json_decode($request->getContent()));
+                $address->phone = isset($user->phone) ? $user->phone : "";
+                $address->save();
+                $user->address_id = $address->id;
+            }
+        }
         $user->save();
+        $user = User::with('cart')->with('address')->findOrFail($userId);
         return response($user, 200);
     
     }
