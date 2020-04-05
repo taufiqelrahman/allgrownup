@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use Hash;
+use App\Rules\MatchOldPassword;
 
 class AuthController extends Controller
 {
@@ -150,6 +151,14 @@ class AuthController extends Controller
             // TODO
             // generate token and save to EmailChange
             // then email token to user with url to '/confirm-email-change'
+        }
+        if (isset($request->password)) {
+            $request->validate([
+                'password' => ['required', new MatchOldPassword],
+                'newPassword' => ['required'],
+                'confirmNewPassword' => ['same:newPassword'],
+            ]);
+            $user->update(['password'=> Hash::make($request->newPassword)]);
         }
         $user->save();
         return response($user, 200);
