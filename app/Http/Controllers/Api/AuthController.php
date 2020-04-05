@@ -145,13 +145,16 @@ class AuthController extends Controller
     {
         $userId = $request->user()->id;
         $user = User::with('cart')->with('address')->findOrFail($userId);
+        $updatedFied;
         if (isset($request->name)) {
             $user->name = $request->name;
+            $updatedField = 'name';
         }
         if (isset($request->email)) {
             // TODO
             // generate token and save to EmailChange
             // then email token to user with url to '/confirm-email-change'
+            $updatedField = 'email';
         }
         if (isset($request->password)) {
             $request->validate([
@@ -160,6 +163,7 @@ class AuthController extends Controller
                 'confirmNewPassword' => ['same:newPassword'],
             ]);
             $user->update(['password'=> Hash::make($request->newPassword)]);
+            $updatedField = 'password';
         }
         if (isset($request->address1)
             || isset($request->address2)
@@ -177,10 +181,11 @@ class AuthController extends Controller
                 $address->save();
                 $user->address_id = $address->id;
             }
+            $updatedField = 'address';
         }
         $user->save();
         $user = User::with('cart')->with('address')->findOrFail($userId);
-        return response($user, 200);
+        return response(['user' => $user, 'updated' => $updatedField], 200);
     
     }
 

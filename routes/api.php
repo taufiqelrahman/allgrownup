@@ -39,22 +39,24 @@ Route::group(['middleware' => ['json.response']], function () {
         Route::post('/me', 'Api\AuthController@updateMe')->name('update.me');
         Route::post('/check-email-change', 'Api\AuthController@checkEmailExists')->name('change.email.api');
         
-        Route::post('/cart', 'Api\CartController@createCart')->name('cart.create');
-        Route::get('/cart', 'Api\CartController@index')->name('cart.index');
+        Route::post('/send-otp', 'Api\OtpController@send')->name('send.otp.api');
+
+        // Route::post('/cart', 'Api\CartController@createCart')->name('cart.create');
+        // Route::get('/cart', 'Api\CartController@index')->name('cart.index');
         // Route::post('/cart', 'Api\CartController@addItem')->name('cart.add');
-        Route::delete('/cart', 'Api\CartController@removeItem')->name('cart.remove');
+        // Route::delete('/cart', 'Api\CartController@removeItem')->name('cart.remove');
         
-        Route::post('/images/upload', 'Api\ImageController@upload');
+        // Route::post('/images/upload', 'Api\ImageController@upload');
 
         Route::apiResources(['orders' => 'Api\OrderController']);
         Route::get('orders/{order_number}/detail', 'Api\OrderController@showDetail')->name('order.showDetail');
-        Route::get('orders/{checkout_id}/checkout', 'Api\OrderController@showCheckout')->name('order.showCheckout');
+        // Route::get('orders/{checkout_id}/checkout', 'Api\OrderController@showCheckout')->name('order.showCheckout');
     });
 
-    Route::get('products/{slug}/slug', 'Api\ProductController@showSlug')->name('product.showSlug');
-    Route::apiResources([
-        'products' => 'Api\ProductController',
-    ]);
+    // Route::get('products/{slug}/slug', 'Api\ProductController@showSlug')->name('product.showSlug');
+    // Route::apiResources([
+    //     'products' => 'Api\ProductController',
+    // ]);
 
     Route::post('webhook/orders/create', 'Api\WebhookController@ordersCreate');
     Route::post('webhook/orders/paid', 'Api\WebhookController@ordersPaid');
