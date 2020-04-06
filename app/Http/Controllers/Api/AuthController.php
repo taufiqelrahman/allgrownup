@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\User;
 use App\Cart;
 use App\Address;
-use Illuminate\Support\Facades\Validator;
+use App\EmailChange;
 use App\Http\Controllers\Controller;
+use App\Rules\MatchOldPassword;
+use App\Mail\EmailChange as EmailChangeMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
 use Hash;
-use App\Rules\MatchOldPassword;
+use Uuid;
+use Redirect;
 
 class AuthController extends Controller
 {
@@ -145,16 +150,31 @@ class AuthController extends Controller
     {
         $userId = $request->user()->id;
         $user = User::with('cart')->with('address')->findOrFail($userId);
-        $updatedFied;
+        $updatedField = "";
+        $errorCode;
         if (isset($request->name)) {
             $user->name = $request->name;
             $updatedField = 'name';
         }
         if (isset($request->email)) {
-            // TODO
-            // generate token and save to EmailChange
-            // then email token to user with url to '/confirm-email-change'
+            $token = Uuid::generate()->string;
+            $emailChange = new EmailChange;
+            $emailChange->user_id = $user->id;
+            $emailChange->email = $request->email;
+            $emailChange->token = $token;
+            $emailChange->save();
+            $url = env('APP_URL').'/api/confirm-email-change?token='.$token;
+            Mail::to($user)->queue(new EmailChangeMail($url));
             $updatedField = 'email';
+        }
+        if (isset($request->newPhone)) {
+            $verified = app(OtpController::class)->verify($request->otp);
+            if ($verified) {
+                $user->phone = $request->newPhone;
+                $updatedField = 'phone';
+            } else {
+                $errorCode = 'OTP_INVALID';
+            }
         }
         if (isset($request->password)) {
             $request->validate([
@@ -185,6 +205,9 @@ class AuthController extends Controller
         }
         $user->save();
         $user = User::with('cart')->with('address')->findOrFail($userId);
+        if (isset($errorCode)) {
+            return response(['error' => $errorCode], 500);
+        }
         return response(['user' => $user, 'updated' => $updatedField], 200);
     
     }
@@ -204,12 +227,11 @@ class AuthController extends Controller
 
     public function confirmEmailChange (Request $request)
     {
-        // TODO
-        // $emailChange = EmailChange::where('token', $request->token)->first();
-        // $user = User::findOrFail($emailChange->user_id);
-        // $user->email = $emailChange->email;
-        // $user->save();
-        // return Redirect::to(env('CLIENT_URL').'/account?toast=email-changed');
-    
+        $emailChange = EmailChange::where('token', $request->token)->first();
+        $user = User::findOrFail($emailChange->user_id);
+        $user->email = $emailChange->email;
+        $user->save();
+        $emailChange->delete();
+        return Redirect::to(env('CLIENT_URL').'/account?toast=email-changed');
     }
 }
