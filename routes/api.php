@@ -21,6 +21,8 @@ Route::group(['middleware' => ['json.response']], function () {
 
     // public routes
     Route::post('/login', 'Api\AuthController@login')->name('login.api');
+    Route::post('/login-facebook', 'SocialAuthController@callbackFacebook')->name('login.facebook.api');
+    Route::post('/login-google', 'SocialAuthController@callbackGoogle')->name('login.google.api');
     Route::post('/register', 'Api\AuthController@register')->name('register.api');
     Route::post('/check-email', 'Api\AuthController@checkEmailExists')->name('check.email.api');
     Route::post('/forgot-password', 'Api\AuthController@forgotPassword')->name('forgot.password.api');
