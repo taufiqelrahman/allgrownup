@@ -43,7 +43,7 @@ Route::group(['middleware' => ['json.response']], function () {
         
         Route::post('/send-otp', 'Api\OtpController@send')->name('send.otp.api');
 
-        // Route::post('/cart', 'Api\CartController@createCart')->name('cart.create');
+        Route::post('/cart', 'Api\CartController@createCart')->name('cart.create');
         // Route::get('/cart', 'Api\CartController@index')->name('cart.index');
         // Route::post('/cart', 'Api\CartController@addItem')->name('cart.add');
         // Route::delete('/cart', 'Api\CartController@removeItem')->name('cart.remove');
