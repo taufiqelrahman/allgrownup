@@ -1,6 +1,8 @@
 deploy_production:
   stage: deploy
   image: docker
+  variables:
+    DOCKER_TLS_CERTDIR: ""
   services:
     - docker:dind  
   tags:
