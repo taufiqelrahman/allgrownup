@@ -1,0 +1,20 @@
+version: "3"
+services:
+  api:
+    container_name: allgrownup
+    build: .
+    working_dir: "/usr/src/wigu/api" # Where to container will assume it should run commands and where you will start out if you go inside the container
+    networks:
+      - default
+      - db_mysql_net
+    ports:
+      - "8000:5120"
+    environment:
+      MYSQL_HOST: db_mysql
+    
+networks:
+  default:
+    external:
+      name: nginx-proxy
+  db_mysql_net:
+    external: true
