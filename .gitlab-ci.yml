@@ -1,6 +1,10 @@
 deploy_production:
   stage: deploy
-  image: gitlab/dind
+  image: docker:latest
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  services:
+    - docker:dind  
   tags:
     - production
   only:
