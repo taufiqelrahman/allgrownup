@@ -1,0 +1,17 @@
+deploy_production:
+  stage: deploy
+  image: docker
+  services:
+    - docker:dind  
+  tags:
+    - production
+  only:
+    refs:
+    - tags
+    - triggers
+    - master
+  when: manual
+  before_script:
+    - apk add --no-cache docker-compose
+  script:
+    - docker-compose up -d
