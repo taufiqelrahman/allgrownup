@@ -1,9 +1,10 @@
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay
+
 deploy_production:
   stage: deploy
   image: docker:git
-  variables:
-    DOCKER_HOST: tcp://docker:2375
-    DOCKER_DRIVER: overlay
   services:
     - docker:dind
   tags:
