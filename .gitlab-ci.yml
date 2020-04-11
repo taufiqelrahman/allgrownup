@@ -1,6 +1,9 @@
 deploy_production:
   stage: deploy
   image: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
   services:
     - docker:18.09.7-dind
   tags:
