@@ -20,10 +20,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Add user for laravel application
 RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
+RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory contents
 COPY . /usr/src/wigu/api
+RUN mkdir -p /usr/src/wigu/api/vendor
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /usr/src/wigu/api
@@ -31,6 +32,6 @@ COPY --chown=www:www . /usr/src/wigu/api
 # Change current user to www
 USER www
 
-RUN sudo composer install
+RUN composer install
 CMD php artisan serve
 EXPOSE 8000
