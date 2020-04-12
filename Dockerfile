@@ -31,6 +31,6 @@ COPY --chown=www:www . /usr/src/wigu/api
 # Change current user to www
 USER www
 
-RUN composer install
+RUN sudo composer install
 CMD php artisan serve
 EXPOSE 8000
