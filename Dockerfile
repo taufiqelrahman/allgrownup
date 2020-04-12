@@ -7,7 +7,7 @@ COPY composer.lock composer.json /var/www/
 WORKDIR /usr/src/wigu/api
 
 # Install dependencies
-RUN yum install -y openssl zip unzip git
+RUN apt-get update && apt-get -y openssl zip unzip git
 RUN docker-php-ext-install pdo mbstring
 
 # Install composer
