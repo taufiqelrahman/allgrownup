@@ -1,19 +1,18 @@
-deploy_production:
-  stage: deploy
-  image: docker:stable
-  services:
-    - docker:dind
-  tags:
-    - production
-  only:
-    refs:
-    - tags
-    - triggers
-    - master
-  when: manual
-  before_script:
-    - docker info
-    - apk add --no-cache docker-compose
-  script:
-    - docker-compose up -d
-    # - docker run -d --name allgrownup allgrownup_api
+# deploy_production:
+#   stage: deploy
+#   image: docker:stable
+#   services:
+#     - docker:dind
+#   tags:
+#     - production
+#   only:
+#     refs:
+#     - tags
+#     - triggers
+#     - master
+#   when: manual
+#   before_script:
+#     - docker info
+#     - apk add --no-cache docker-compose
+#   script:
+#     - docker-compose up -d

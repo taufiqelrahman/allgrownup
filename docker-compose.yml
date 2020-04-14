@@ -10,7 +10,7 @@ services:
     ports:
       - "8000:5120"
     environment:
-      MYSQL_HOST: db_mysql
+      DB_HOST: db_mysql
     
 networks:
   default:
