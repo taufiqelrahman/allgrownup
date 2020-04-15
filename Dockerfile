@@ -23,13 +23,13 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
 
 # Copy existing application directory contents
-COPY . /usr/src/wigu/api
+COPY /allgrownup /usr/src/wigu/api
 # RUN mkdir -p /usr/src/wigu/api/vendor
 # RUN sudo chmod -R 755 /usr/src/wigu/api/vendor
 RUN sudo chown -R www:www /usr/src/wigu/api/
 
 # Copy existing application directory permissions
-COPY --chown=www:www . /usr/src/wigu/api
+COPY --chown=www:www /allgrownup /usr/src/wigu/api
 
 # Change current user to www
 USER www
