@@ -14,7 +14,7 @@ services:
       LETSENCRYPT_HOST: api.taufiqelrahman.com # production
       DB_HOST: db_mysql
       APP_NAME: "When I Grow Up"
-      CLIENT_URL: wigu.taufiqelrahman.com
+      CLIENT_URL: https://wigu.taufiqelrahman.com
       DB_DATABASE: whenigrowup
       DB_USERNAME: root
       QUEUE_CONNECTION: database
