@@ -35,6 +35,6 @@ COPY --chown=www:www . /usr/src/wigu/api
 USER www
 
 RUN composer install
-RUN env >> .env
+# RUN env >> .env
 CMD php artisan serve --host=0.0.0.0 --port 5120
 EXPOSE 5120
