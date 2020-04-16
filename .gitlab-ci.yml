@@ -1,18 +1,33 @@
-# deploy_production:
-#   stage: deploy
-#   image: docker:stable
-#   services:
-#     - docker:dind
-#   tags:
-#     - production
-#   only:
-#     refs:
-#     - tags
-#     - triggers
-#     - master
-#   when: manual
-#   before_script:
-#     - docker info
-#     - apk add --no-cache docker-compose
-#   script:
-#     - docker-compose up -d
+deploy_production:
+  stage: deploy
+  image: docker:stable
+  services:
+    - docker:dind
+  tags:
+    - production
+  only:
+    refs:
+    - tags
+    - triggers
+    - master
+  when: manual
+  before_script:
+    - docker info
+    - apk add --no-cache docker-compose git
+    - echo SHOPIFY_URL="$SHOPIFY_URL" >> .env
+    - echo APP_KEY="$APP_KEY" >> .env
+    - echo DB_PASSWORD="$DB_PASSWORD" >> .env
+    - echo MAIL_USERNAME="$MAIL_USERNAME" >> .env
+    - echo MAIL_PASSWORD="$MAIL_PASSWORD" >> .env
+    - echo MAIL_FROM_ADDRESS="$MAIL_FROM_ADDRESS" >> .env
+    - echo OTP_KEY="$OTP_KEY" >> .env
+    - echo MIDTRANS_CLIENT_KEY="$MIDTRANS_CLIENT_KEY" >> .env
+    - echo MIDTRANS_SERVER_KEY="$MIDTRANS_SERVER_KEY" >> .env
+    - echo SHOPIFY_ACCESS_TOKEN="$SHOPIFY_ACCESS_TOKEN" >> .env
+    - echo GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" >> .env
+    - echo GOOGLE_CLIENT_SECRET="$GOOGLE_CLIENT_SECRET" >> .env
+    - cat .env
+  script:
+    - source .env
+    - docker-compose up --build -d
+    # - docker-compose up -d
