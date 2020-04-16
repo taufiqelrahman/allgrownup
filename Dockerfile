@@ -36,5 +36,5 @@ USER www
 
 RUN composer install
 # RUN env >> .env
-CMD php artisan serve --port 80
-EXPOSE 80
+CMD php artisan serve --port 5120
+EXPOSE 5120
