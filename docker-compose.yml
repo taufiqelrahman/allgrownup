@@ -1,29 +1,29 @@
 version: "3"
 services:
   api:
-  container_name: allgrownup
-  build: .
-  working_dir: "/usr/src/wigu/api" # Where to container will assume it should run commands and where you will start out if you go inside the container
-  networks:
-    - default
-    - db_mysql_net
-  ports:
-    - "5120:5120"
-  environment:
-    VIRTUAL_HOST: api.taufiqelrahman.com # production
-    LETSENCRYPT_HOST: api.taufiqelrahman.com # production
-    DB_HOST: db_mysql
-    APP_NAME: "When I Grow Up"
-    CLIENT_URL: wigu.taufiqelrahman.com
-    DB_DATABASE: whenigrowup
-    DB_USERNAME: root
-    QUEUE_CONNECTION: database
-    MAIL_HOST: smtp.googlemail.com
-    MAIL_PORT: 465
-    MAIL_ENCRYPTION: ssl
-    MAIL_FROM_NAME: "When I Grow Up"
-    ADMIN_API_PATH: /admin/api/2020-01
-    GOOGLE_REDIRECT_URL: https://wigu.taufiqelrahman.com/google
+    container_name: allgrownup
+    build: .
+    working_dir: "/usr/src/wigu/api" # Where to container will assume it should run commands and where you will start out if you go inside the container
+    networks:
+      - default
+      - db_mysql_net
+    ports:
+      - "5120:5120"
+    environment:
+      VIRTUAL_HOST: api.taufiqelrahman.com # production
+      LETSENCRYPT_HOST: api.taufiqelrahman.com # production
+      DB_HOST: db_mysql
+      APP_NAME: "When I Grow Up"
+      CLIENT_URL: wigu.taufiqelrahman.com
+      DB_DATABASE: whenigrowup
+      DB_USERNAME: root
+      QUEUE_CONNECTION: database
+      MAIL_HOST: smtp.googlemail.com
+      MAIL_PORT: 465
+      MAIL_ENCRYPTION: ssl
+      MAIL_FROM_NAME: "When I Grow Up"
+      ADMIN_API_PATH: /admin/api/2020-01
+      GOOGLE_REDIRECT_URL: https://wigu.taufiqelrahman.com/google
     
 networks:
   default:
