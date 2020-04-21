@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Testimonial;
 use App\Occupation;
-use App\BookPage;
+use App\BookContent;
 
 class MasterController extends Controller
 {
@@ -37,9 +37,13 @@ class MasterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function bookPages()
+    public function bookPages(Request $request)
     {
-        $book_pages = BookPage::with('occupation')->with('bookContents')->get();
+        $ids = explode(',', $request->jobs);
+        $data = array_merge(array(11), $ids, array(12, 13));
+        $book_pages = BookContent::whereIn('occupation_id', $data)
+                                ->with('occupation')
+                                ->get();
         return response(['data' => $book_pages], 200);
     }
 
