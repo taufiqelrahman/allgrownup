@@ -15,14 +15,15 @@ class CreateBookContentsTable extends Migration
     {
         Schema::create('book_contents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('book_page_id');
+            $table->unsignedBigInteger('occupation_id');
+            $table->tinyInteger('page_number');
             $table->longText('english');
             $table->longText('indonesia');
             $table->string('style');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('book_page_id')
-                ->references('id')->on('book_pages');
+            $table->foreign('occupation_id')
+                ->references('id')->on('occupations');
         });
     }
 

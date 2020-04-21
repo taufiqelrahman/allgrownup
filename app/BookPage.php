@@ -1,22 +1,22 @@
 <?php
 
-namespace App;
+// namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BookPage extends Model
-{
-    use SoftDeletes;
-    protected $fillable = ['occupation_id', 'order'];
+// class BookPage extends Model
+// {
+//     use SoftDeletes;
+//     protected $fillable = ['occupation_id', 'order'];
     
-    public function bookContents()
-    {
-        return $this->hasMany('App\BookContent');
-    }
+//     public function bookContents()
+//     {
+//         return $this->hasMany('App\BookContent');
+//     }
 
-    public function occupation()
-    {
-        return $this->belongsTo('App\Occupation');
-    }
-}
+//     public function occupation()
+//     {
+//         return $this->belongsTo('App\Occupation');
+//     }
+// }
