@@ -28,7 +28,7 @@ class MasterController extends Controller
      */
     public function occupations()
     {
-        $occupations = Occupation::get();
+        $occupations = Occupation::whereNotIn('id', [11, 12, 13, 14])->get();
         return response(['data' => $occupations], 200);
     }
 
@@ -40,9 +40,11 @@ class MasterController extends Controller
     public function bookPages(Request $request)
     {
         $ids = explode(',', $request->jobs);
-        $data = array_merge(array(11), $ids, array(12, 13));
+        $data = array_merge(array(13, 11), $ids, array(13, 14));
+        $ids_ordered = implode(',', $data);
         $book_pages = BookContent::whereIn('occupation_id', $data)
                                 ->with('occupation')
+                                ->orderByRaw("FIELD(occupation_id, $ids_ordered)")
                                 ->get();
         return response(['data' => $book_pages], 200);
     }
