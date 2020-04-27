@@ -9,6 +9,9 @@ services:
       - db_mysql_net
     ports:
       - "5120:5120"
+    expose: # production
+    - 80
+    - 443
     environment:
       # VIRTUAL_HOST: api.taufiqelrahman.com # staging
       # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
