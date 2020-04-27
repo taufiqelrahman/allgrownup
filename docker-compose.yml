@@ -7,16 +7,15 @@ services:
     networks:
       - default
       - db_mysql_net
-    # ports:
-    #   - "5120:80"
-    expose: # production
-    - 80
-    - 443
+    ports:
+      - "5120:5120"
+    # expose: # production
+    # - 80
+    # - 443
     environment:
-      # VIRTUAL_HOST: api.taufiqelrahman.com # staging
-      # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
       VIRTUAL_HOST: api.whenigrowup.co.id # production
       LETSENCRYPT_HOST: api.whenigrowup.co.id # production
+      VIRTUAL_PORT: 5120 # production
       DB_HOST: db_mysql
       APP_NAME: "When I Grow Up"
       CLIENT_URL: https://whenigrowup.co.id
@@ -29,6 +28,8 @@ services:
       MAIL_FROM_NAME: "When I Grow Up"
       ADMIN_API_PATH: /admin/api/2020-01
       GOOGLE_REDIRECT_URL: https://whenigrowup.co.id/google
+      # VIRTUAL_HOST: api.taufiqelrahman.com # staging
+      # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
     
 networks:
   default:

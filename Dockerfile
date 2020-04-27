@@ -38,5 +38,5 @@ RUN composer install
 # prefer to run install passport manually
 # RUN php artisan passport:install
 # RUN env >> .env
-CMD sudo php artisan serve --host=0.0.0.0 --port=80
+CMD php artisan serve --host=0.0.0.0 --port=5120
 EXPOSE 5120
