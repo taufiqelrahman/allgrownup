@@ -168,13 +168,15 @@ class AuthController extends Controller
             $updatedField = 'email';
         }
         if (isset($request->newPhone)) {
-            $verified = app(OtpController::class)->verify($request->otp);
-            if ($verified) {
-                $user->phone = $request->newPhone;
-                $updatedField = 'phone';
-            } else {
-                $errorCode = 'OTP_INVALID';
-            }
+            // $verified = app(OtpController::class)->verify($request->otp);
+            // if ($verified) {
+            //     $user->phone = $request->newPhone;
+            //     $updatedField = 'phone';
+            // } else {
+            //     $errorCode = 'OTP_INVALID';
+            // }
+            $user->phone = $request->newPhone;
+            $updatedField = 'phone';
         }
         if (isset($request->password)) {
             $request->validate([
