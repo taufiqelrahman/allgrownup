@@ -10,11 +10,13 @@ services:
     ports:
       - "5120:5120"
     environment:
-      VIRTUAL_HOST: api.taufiqelrahman.com # production
-      LETSENCRYPT_HOST: api.taufiqelrahman.com # production
+      # VIRTUAL_HOST: api.taufiqelrahman.com # staging
+      # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
+      VIRTUAL_HOST: api.whenigrowup.co.id # production
+      LETSENCRYPT_HOST: api.whenigrowup.co.id # production
       DB_HOST: db_mysql
       APP_NAME: "When I Grow Up"
-      CLIENT_URL: https://wigu.taufiqelrahman.com
+      CLIENT_URL: https://whenigrowup.co.id
       DB_DATABASE: whenigrowup
       DB_USERNAME: root
       QUEUE_CONNECTION: database
@@ -23,7 +25,7 @@ services:
       MAIL_ENCRYPTION: ssl
       MAIL_FROM_NAME: "When I Grow Up"
       ADMIN_API_PATH: /admin/api/2020-01
-      GOOGLE_REDIRECT_URL: https://wigu.taufiqelrahman.com/google
+      GOOGLE_REDIRECT_URL: https://whenigrowup.co.id/google
     
 networks:
   default:
