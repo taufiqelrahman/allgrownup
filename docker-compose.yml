@@ -8,9 +8,9 @@ services:
       - default
       - db_mysql_net
     ports:
-      - "5120:443"
+      - "5120:80"
     expose: # production
-    # - 80
+    - 80
     - 443
     environment:
       # VIRTUAL_HOST: api.taufiqelrahman.com # staging
