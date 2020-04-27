@@ -17,7 +17,9 @@ class Child extends Model
         'skin',
         'hair',
         'birthdate',
-        'message'
+        'message',
+        'language',
+        'occupations'
     ];
     //
 }

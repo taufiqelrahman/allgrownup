@@ -17,6 +17,7 @@ class CreateOccupationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->longText('description')->nullable();
+            $table->string('indonesia')->nullable();
             // $table->tinyInteger('page_count');
             $table->timestamps();
             $table->softDeletes();

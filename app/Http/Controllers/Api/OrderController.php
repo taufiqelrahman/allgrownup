@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderItem;
+use App\Child;
 use App\Address;
 use App\User;
 use App\Cart;
@@ -151,14 +152,14 @@ class OrderController extends Controller
             } else {
                 $address = new Address;
             }
-            $shippingAddress = $request->shipping_address;
+            $shipping_address = $request->shipping_address;
             $unallowed_props = ['company', 'latitude', 'longitude', 'name', 'country_code', 'province_code'];
-            foreach ($shippingAddress as $key => $value) {
+            foreach ($shipping_address as $key => $value) {
                 if (in_array($key, $unallowed_props)) {
-                    unset($shippingAddress->$key);
+                    unset($shipping_address->$key);
                 }
             }
-            $address->fill((array) $shippingAddress);
+            $address->fill((array) $shipping_address);
             $address->save();
             $user->address_id = $address->id;
             $user->save();
@@ -169,6 +170,28 @@ class OrderController extends Controller
             $order->state_id = 1;
             $order->order_number = str_replace('#', '', $request->name);
             $order->save();
+            // save child data
+            $shopify_data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id)->order;
+            foreach ($shopify_data->line_items as $data) {
+                $child_data = (object)[];
+                foreach ($data->properties as $prop)
+                {
+                    $child_data->{$prop->name} = $prop->value;
+                }
+                $child = new Child;
+                $child->order_id = $order->id;
+                $child->name = $child_data->Name;
+                $child->cover = $child_data->Cover;
+                $child->gender = $child_data->Gender;
+                $child->age = $child_data->Age;
+                $child->skin = $child_data->Skin;
+                $child->hair = $child_data->Hair;
+                $child->birthdate = $child_data->{'Date of Birth'};
+                $child->message = $child_data->Dedication;
+                $child->language = $child_data->Language;
+                $child->occupations = $child_data->Occupations;
+                $child->save();
+            }
             // delete cart
             $cart = Cart::where('user_id', $user->id)->firstOrFail();
             $cart->delete();

@@ -11,7 +11,8 @@ class Occupation extends Model
     protected $fillable = [
         'name',
         'description',
-        'page_count'
+        'page_count',
+        'indonesia'
     ];
     //
 }

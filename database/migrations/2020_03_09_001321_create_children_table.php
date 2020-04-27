@@ -18,11 +18,13 @@ class CreateChildrenTable extends Migration
             $table->unsignedBigInteger('order_id');
             $table->string('name');
             $table->string('cover');
+            $table->string('language');
+            $table->string('occupations');
             $table->enum('gender', ['boy', 'girl']);
             $table->enum('age', ['toddler', 'kid']);
             $table->enum('skin', ['light', 'medium', 'dark']);
             $table->enum('hair', ['short', 'hijab', 'curly']);
-            $table->timestamp('birthdate');
+            $table->string('birthdate');
             $table->longText('message');
             $table->timestamps();
             $table->softDeletes();
