@@ -27,7 +27,8 @@ services:
       MAIL_ENCRYPTION: ssl
       MAIL_FROM_NAME: "When I Grow Up"
       ADMIN_API_PATH: /admin/api/2020-01
-      GOOGLE_REDIRECT_URL: https://whenigrowup.co.id/google
+      GOOGLE_REDIRECT_URL: https://whenigrowup.co.id/login?social=google
+      FACEBOOK_REDIRECT_URI: https://whenigrowup.co.id/login?social=facebook
       # VIRTUAL_HOST: api.taufiqelrahman.com # staging
       # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
     
