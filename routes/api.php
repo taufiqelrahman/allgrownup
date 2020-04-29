@@ -34,6 +34,8 @@ Route::group(['middleware' => ['json.response']], function () {
     Route::get('/provinces', 'Api\MasterController@provinces')->name('province.api');
     Route::get('/book-pages', 'Api\MasterController@bookPages')->name('book.pages.api');
     
+    Route::post('/message/send', 'Api\MessageController@saveMessage')->name('save.message');
+    
     // private routes
     Route::middleware('auth:api')->group(function () {
         
