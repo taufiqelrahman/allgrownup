@@ -108,9 +108,9 @@ class OrderController extends Controller
     {
         $order = Order::where('order_number', $order_number)->with('state')->first();
         $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
-        $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
-        $data->transaction = last($transactions);
-        $data->payment = app(MidtransController::class)->getTransaction($data->transaction->authorization);
+        // $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
+        // $data->transaction = last($transactions);
+        // $data->payment = app(MidtransController::class)->getTransaction($data->transaction->authorization);
         $data->state = $order->state;
         // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
         
