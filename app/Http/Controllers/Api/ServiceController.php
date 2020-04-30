@@ -11,7 +11,7 @@ class ServiceController extends Controller
   public function __construct()
   {
     $this->guzzle = new \GuzzleHttp\Client([
-        'base_uri' => env('SHOPIFY_URL'),
+        'base_url' => env('SHOPIFY_URL'),
         'headers' => ['X-Shopify-Access-Token' => env('SHOPIFY_ACCESS_TOKEN')],
     ]);
     $this->ADMIN_API_PATH = env('ADMIN_API_PATH');
