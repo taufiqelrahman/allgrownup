@@ -24,7 +24,7 @@ class CreateChildrenTable extends Migration
             $table->enum('age', ['toddler', 'kid']);
             $table->enum('skin', ['light', 'medium', 'dark']);
             $table->enum('hair', ['short', 'hijab', 'curly']);
-            $table->string('birthdate');
+            $table->string('birthdate')->nullable();
             $table->longText('message');
             $table->timestamps();
             $table->softDeletes();

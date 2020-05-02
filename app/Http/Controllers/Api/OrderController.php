@@ -186,7 +186,7 @@ class OrderController extends Controller
                 $child->age = $child_data->Age;
                 $child->skin = $child_data->Skin;
                 $child->hair = $child_data->Hair;
-                $child->birthdate = $child_data->{'Date of Birth'};
+                // $child->birthdate = $child_data->{'Date of Birth'};
                 $child->message = $child_data->Dedication;
                 $child->language = $child_data->Language;
                 $child->occupations = $child_data->Occupations;
