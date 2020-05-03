@@ -31,6 +31,45 @@ services:
       FACEBOOK_REDIRECT_URI: https://whenigrowup.co.id/login?social=facebook
       # VIRTUAL_HOST: api.taufiqelrahman.com # staging
       # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
+    # volumes:
+    #   - /var/lib/wiguapi
+  queue:
+    container_name: allgrownup_queue
+    build: 
+      context: .
+      dockerfile: queue.Dockerfile
+    working_dir: "/usr/src/wigu/queue" # Where to container will assume it should run commands and where you will start out if you go inside the container
+    networks:
+      - default
+      - db_mysql_net
+    depends_on:
+      - api
+    # ports:
+    #   - "5120:5120"
+    # expose: # production
+    # - 80
+    # - 443
+    environment:
+      # VIRTUAL_HOST: api.whenigrowup.co.id # production
+      # LETSENCRYPT_HOST: api.whenigrowup.co.id # production
+      # VIRTUAL_PORT: 5120 # production
+      DB_HOST: db_mysql
+      APP_NAME: "When I Grow Up"
+      CLIENT_URL: https://whenigrowup.co.id
+      DB_DATABASE: whenigrowup
+      DB_USERNAME: root
+      QUEUE_CONNECTION: database
+      MAIL_HOST: smtp.googlemail.com
+      MAIL_PORT: 465
+      MAIL_ENCRYPTION: ssl
+      MAIL_FROM_NAME: "When I Grow Up"
+      # ADMIN_API_PATH: /admin/api/2020-01
+      # GOOGLE_REDIRECT_URL: https://whenigrowup.co.id/login?social=google
+      # FACEBOOK_REDIRECT_URI: https://whenigrowup.co.id/login?social=facebook
+      # VIRTUAL_HOST: api.taufiqelrahman.com # staging
+      # LETSENCRYPT_HOST: api.taufiqelrahman.com # staging
+    # volumes:
+    #   - /var/lib/wiguapi
     
 networks:
   default:
