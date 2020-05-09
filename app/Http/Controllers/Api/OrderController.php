@@ -8,6 +8,7 @@ use App\OrderItem;
 use App\Child;
 use App\Address;
 use App\User;
+use App\Guest;
 use App\Cart;
 use App\CartItem;
 use App\Mail\OrderCreated;
@@ -108,9 +109,10 @@ class OrderController extends Controller
     {
         $order = Order::where('order_number', $order_number)->with('state')->first();
         $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
-        // $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
-        // $data->transaction = last($transactions);
-        // $data->payment = app(MidtransController::class)->getTransaction($data->transaction->authorization);
+        $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
+        $last_transaction = last($transactions);
+        // $data->transaction = app(ServiceController::class)->retrieveTransactionById2($order->shopify_order_id, $last_transaction->id)->transaction;
+        $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
         $data->state = $order->state;
         // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
         
@@ -144,7 +146,16 @@ class OrderController extends Controller
     {
         $request = json_decode($request->getContent());
         $response = \DB::transaction(function() use ($request) {
-            $user = User::with('address')->where('email', $request->email)->firstOrFail();
+            $isGuest = false;
+            $user = User::with('address')->where('email', $request->email)->first();
+            if (!isset($user)) {
+                $user = new Guest;
+                $user->name = $request->shipping_address->name;
+                $user->email = $request->email;
+                $user->phone = $request->shipping_address->phone;
+                $user->save();
+                $isGuest = true;
+            }
             // save address
             if (isset($user->address))
             {
@@ -166,7 +177,11 @@ class OrderController extends Controller
             // save order
             $order = new Order;
             $order->shopify_order_id = $request->id;
-            $order->user_id = $user->id;
+            if ($isGuest) {
+                $order->guest_id = $user->id;
+            } else {
+                $order->user_id = $user->id;
+            }
             $order->state_id = 1;
             $order->order_number = str_replace('#', '', $request->name);
             $order->save();
@@ -193,8 +208,8 @@ class OrderController extends Controller
                 $child->save();
             }
             // delete cart
-            $cart = Cart::where('user_id', $user->id)->firstOrFail();
-            $cart->delete();
+            $cart = Cart::where('user_id', $user->id)->delete();
+            // $cart->delete();
             // Mail::to($user)->queue(new OrderCreated($order));
             return response(['data' => $order], 200);
         }, 5);

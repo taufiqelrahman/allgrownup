@@ -18,7 +18,8 @@ class CreateOrdersTable extends Migration
             $table->string('shopify_order_id');
             $table->string('order_number')->index();
             // $table->string('shipping_number')->nullable();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('guest_id')->nullable();
             // $table->unsignedBigInteger('address_id');
             // $table->string('payment_type')->nullable();
             // $table->decimal('total');
@@ -31,6 +32,8 @@ class CreateOrdersTable extends Migration
             $table->softDeletes();
             $table->foreign('user_id')
                 ->references('id')->on('users');
+            $table->foreign('guest_id')
+                ->references('id')->on('guests');
             $table->foreign('state_id')
                 ->references('id')->on('states');
             // $table->foreign('address_id')
