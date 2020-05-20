@@ -54,15 +54,12 @@ services:
       # LETSENCRYPT_HOST: api.whenigrowup.co.id # production
       # VIRTUAL_PORT: 5120 # production
       DB_HOST: db_mysql
-      APP_NAME: "When I Grow Up"
-      CLIENT_URL: https://whenigrowup.co.id
       DB_DATABASE: whenigrowup
       DB_USERNAME: root
       QUEUE_CONNECTION: database
       MAIL_HOST: smtp.googlemail.com
       MAIL_PORT: 465
       MAIL_ENCRYPTION: ssl
-      MAIL_FROM_NAME: "When I Grow Up"
       # ADMIN_API_PATH: /admin/api/2020-01
       # GOOGLE_REDIRECT_URL: https://whenigrowup.co.id/login?social=google
       # FACEBOOK_REDIRECT_URI: https://whenigrowup.co.id/login?social=facebook

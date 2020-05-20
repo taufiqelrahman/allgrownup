@@ -15,6 +15,10 @@ deploy_production:
     - docker info
     - apk add --no-cache docker-compose git
     - echo SHOPIFY_URL="$SHOPIFY_URL" >> .env
+    - echo CLIENT_URL="$CLIENT_URL" >> .env
+    - echo ADMIN_URL="$ADMIN_URL" >> .env
+    - echo APP_NAME="$APP_NAME" >> .env
+    - echo MAIL_FROM_NAME="$MAIL_FROM_NAME" >> .env
     - echo APP_KEY="$APP_KEY" >> .env
     - echo DB_PASSWORD="$DB_PASSWORD" >> .env
     - echo MAIL_USERNAME="$MAIL_USERNAME" >> .env
