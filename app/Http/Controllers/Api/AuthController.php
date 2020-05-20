@@ -236,4 +236,32 @@ class AuthController extends Controller
         $emailChange->delete();
         return Redirect::to(env('CLIENT_URL').'/account?toast=email-changed');
     }
+
+    public function isAdmin (Request $request)
+    {
+        $isAdmin = $request->user()->is_admin;
+        return response(['is_admin' => $isAdmin], 200);
+    }
+
+    public function users (Request $request)
+    {
+        $isAdmin = $request->user()->is_admin;
+        if ($isAdmin) {
+            $users = User::get();
+            return response($users, 200);
+        }
+        return response('Unauthorized', 401);
+    }
+
+    public function updateUser ($id, Request $request)
+    {
+        $isAdmin = $request->user()->is_admin;
+        if ($isAdmin) {
+            $user = User::findOrFail($id);
+            $user->phone = $request->phone;
+            $user->save();
+            return response($user, 200);
+        }
+        return response('Unauthorized', 401);
+    }
 }

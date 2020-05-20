@@ -45,6 +45,9 @@ Route::group(['middleware' => ['json.response']], function () {
         Route::post('/check-email-change', 'Api\AuthController@checkEmailExists')->name('change.email.api');
         
         Route::post('/send-otp', 'Api\OtpController@send')->name('send.otp.api');
+        Route::get('/is-admin', 'Api\AuthController@isAdmin')->name('check.admin.api');
+        Route::get('/users', 'Api\AuthController@users')->name('users.admin.api');
+        Route::patch('/users/{id}', 'Api\AuthController@updateUser')->name('update.user.admin.api');
 
         Route::post('/cart', 'Api\CartController@createCart')->name('cart.create');
         // Route::get('/cart', 'Api\CartController@index')->name('cart.index');
