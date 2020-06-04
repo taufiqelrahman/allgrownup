@@ -1,8 +1,7 @@
+image: tiangolo/docker-with-compose
+
 deploy_production:
   stage: deploy
-  image: docker:stable
-  services:
-    - docker:dind
   tags:
     - production
   only:
@@ -12,8 +11,6 @@ deploy_production:
     - master
   when: manual
   before_script:
-    - docker info
-    - apk add --no-cache docker-compose git
     - echo SHOPIFY_URL="$SHOPIFY_URL" >> .env
     - echo CLIENT_URL="$CLIENT_URL" >> .env
     - echo ADMIN_URL="$ADMIN_URL" >> .env
