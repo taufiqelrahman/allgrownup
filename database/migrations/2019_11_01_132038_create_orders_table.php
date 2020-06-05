@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('shopify_order_id');
+            $table->string('shopify_order_id')->index();
             $table->string('order_number')->index();
             // $table->string('shipping_number')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();

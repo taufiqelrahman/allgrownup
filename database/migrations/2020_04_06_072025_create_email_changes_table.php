@@ -17,7 +17,7 @@ class CreateEmailChangesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id');
             $table->string('email');
-            $table->string('token');
+            $table->string('token')->unique();;
             $table->timestamps();
             $table->softDeletes();
         });
