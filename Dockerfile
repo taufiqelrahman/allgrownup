@@ -19,8 +19,8 @@ WORKDIR /usr/src/wigu/api
 # RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
+# RUN groupadd -g 1000 www
+# RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
 
 # Copy existing application directory contents
 COPY . /usr/src/wigu/api
