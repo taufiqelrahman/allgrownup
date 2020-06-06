@@ -85,6 +85,7 @@ class MidtransController extends Controller
     public function getTransaction($order_number)
     {
         $status = \Midtrans\Transaction::status(201900000068);
+        $status = \Midtrans\Transaction::status($order_number);
         return $status;
     }
 }
