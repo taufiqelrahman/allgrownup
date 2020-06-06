@@ -1,4 +1,4 @@
-FROM php:7
+FROM lorisleiva/laravel-docker
 
 # Copy composer.lock and composer.json
 COPY composer.lock composer.json /var/www/
@@ -7,32 +7,32 @@ COPY composer.lock composer.json /var/www/
 WORKDIR /usr/src/wigu/queue
 
 # Install dependencies
-RUN apt-get update && apt-get install -y openssl zip unzip git libonig-dev sudo
+# RUN apt-get update && apt-get install -y openssl zip unzip git libonig-dev sudo
 
 # Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install extensions
-RUN docker-php-ext-install pdo_mysql pcntl
+# RUN docker-php-ext-install pdo_mysql pcntl
 
 # Install composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
+# RUN groupadd -g 1000 www
+# RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
 
 # Copy existing application directory contents
 COPY . /usr/src/wigu/queue
 # RUN mkdir -p /usr/src/wigu/api/vendor
 # RUN sudo chmod -R 755 /usr/src/wigu/api/vendor
-RUN sudo chown -R www:www /usr/src/wigu/queue/
+# RUN sudo chown -R www:www /usr/src/wigu/queue/
 
 # Copy existing application directory permissions
-COPY --chown=www:www . /usr/src/wigu/queue
+# COPY --chown=www:www . /usr/src/wigu/queue
 
 # Change current user to www
-USER www
+# USER www
 
 RUN composer install
 # prefer to run install passport manually
