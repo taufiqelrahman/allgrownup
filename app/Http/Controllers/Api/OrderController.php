@@ -105,9 +105,13 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showDetail($order_number)
+    public function showDetail(Request $request, $order_number)
     {
-        $order = Order::where('order_number', $order_number)->with('state')->first();
+        $user_id = $request->user()->id;
+        $order = Order::where('user_id', $user_id)
+                        ->where('order_number', $order_number)
+                        ->with('state')
+                        ->firstOrFail();
         $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
         $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
         $last_transaction = last($transactions);
@@ -115,6 +119,27 @@ class OrderController extends Controller
         $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
         $data->state = $order->state;
         // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
+        
+        return response(['data' => $data], 200);
+    }
+
+    /**
+     * Display the specified order for guest.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showGuestDetail($order_number)
+    {
+        $order = Order::whereNull('user_id')
+                        ->where('order_number', $order_number)
+                        ->with('state')
+                        ->firstOrFail();
+        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
+        $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
+        $last_transaction = last($transactions);
+        $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        $data->state = $order->state;
         
         return response(['data' => $data], 200);
     }

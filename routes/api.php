@@ -60,6 +60,7 @@ Route::group(['middleware' => ['json.response']], function () {
         Route::get('orders/{order_number}/detail', 'Api\OrderController@showDetail')->name('order.showDetail');
         // Route::get('orders/{checkout_id}/checkout', 'Api\OrderController@showCheckout')->name('order.showCheckout');
     });
+    Route::get('orders/{order_number}/guest', 'Api\OrderController@showGuestDetail')->name('order.guestDetail');
 
     // Route::get('products/{slug}/slug', 'Api\ProductController@showSlug')->name('product.showSlug');
     // Route::apiResources([
