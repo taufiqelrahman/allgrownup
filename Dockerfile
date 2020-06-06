@@ -26,13 +26,13 @@ WORKDIR /usr/src/wigu/api
 COPY . /usr/src/wigu/api
 # RUN mkdir -p /usr/src/wigu/api/vendor
 # RUN sudo chmod -R 755 /usr/src/wigu/api/vendor
-RUN chown -R www:www /usr/src/wigu/api/
+# RUN chown -R www:www /usr/src/wigu/api/
 
 # Copy existing application directory permissions
-COPY --chown=www:www . /usr/src/wigu/api
+# COPY --chown=www:www . /usr/src/wigu/api
 
 # Change current user to www
-USER www
+# USER www
 
 RUN composer install
 # prefer to run install passport manually
