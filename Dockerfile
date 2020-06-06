@@ -8,7 +8,6 @@ WORKDIR /usr/src/wigu/api
 
 # Install dependencies
 # RUN apt-get update && apt-get install -y openssl zip unzip git libonig-dev sudo
-RUN apt-get update && apt-get install -y sudo
 
 # Clear cache
 # RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -27,7 +26,7 @@ RUN useradd -u 1000 -ms /bin/bash -g www www | chpasswd && adduser www sudo
 COPY . /usr/src/wigu/api
 # RUN mkdir -p /usr/src/wigu/api/vendor
 # RUN sudo chmod -R 755 /usr/src/wigu/api/vendor
-RUN sudo chown -R www:www /usr/src/wigu/api/
+RUN chown -R www:www /usr/src/wigu/api/
 
 # Copy existing application directory permissions
 COPY --chown=www:www . /usr/src/wigu/api
