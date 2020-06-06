@@ -8,7 +8,7 @@ WORKDIR /usr/src/wigu/api
 
 # Install dependencies
 # RUN apt-get update && apt-get install -y openssl zip unzip git libonig-dev sudo
-RUN sudo
+RUN apt-get update && apt-get install -y sudo
 
 # Clear cache
 # RUN apt-get clean && rm -rf /var/lib/apt/lists/*
