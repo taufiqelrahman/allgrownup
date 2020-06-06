@@ -24,10 +24,20 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $data = app(ServiceController::class)->retrieveOrders();
-        $data->order_states = Order::with('state')->get();
+        $user_email = $request->user()->email;
+        $allOrders = app(ServiceController::class)->retrieveOrders()->orders;
+        // $orders = array_values(array_filter($allOrders, function ($order) use($user_email) {
+        //     return ($order->email == $user_email);
+        // }));
+        $orders = [];
+        foreach ($allOrders as $order) {
+            if ($order->email == $user_email) {
+                array_push($orders, $order);
+            }
+        }
+        $order_states = Order::with('state')->get();
         // $data->checkouts = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
-        return response(['data' => $data], 200);
+        return response(['data' => ['orders' => $orders, 'order_states' => $order_states]], 200);
     }
 
     /**
