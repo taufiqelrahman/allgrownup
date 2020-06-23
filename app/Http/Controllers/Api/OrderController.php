@@ -124,9 +124,11 @@ class OrderController extends Controller
                         ->firstOrFail();
         $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
         $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
-        $last_transaction = last($transactions);
-        // $data->transaction = app(ServiceController::class)->retrieveTransactionById2($order->shopify_order_id, $last_transaction->id)->transaction;
-        $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        if (count($transactions) > 1) {
+            $last_transaction = last($transactions);
+            // $data->transaction = app(ServiceController::class)->retrieveTransactionById2($order->shopify_order_id, $last_transaction->id)->transaction;
+            $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        }
         $data->state = $order->state;
         // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
         

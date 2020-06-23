@@ -1,0 +1,153 @@
+{% capture email_title %}Hore {{ customer.first_name }}! Buku ceritamu sedang dikirim!{% endcapture %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>{{ email_title }}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width">
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/notifications/styles.css"> -->
+    <!-- <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:400,600|Poppins:400,600,700&display=swap"
+        rel="stylesheet">
+    <style>
+        .button__cell {
+            background: {
+                    {
+                    shop.email_accent_color
+                }
+            }
+
+            ;
+        }
+
+        a,
+        a:hover,
+        a:active,
+        a:visited {
+            color: {
+                    {
+                    shop.email_accent_color
+                }
+            }
+
+            ;
+        }
+    </style>
+</head>
+
+<body>
+    <table style="width: 100%;">
+        <tr>
+            <td>
+                <table style="width: 600px;margin: 12px auto 18px;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <img src="https://whenigrowup.co.id/static/images/logo.png" alt="logo" width="">
+                        </td>
+                    </tr>
+                </table>
+                <table style="width: 600px;margin: 0 auto 18px;">
+                    <tr>
+                        <td bgcolor="#ffffff" id="m_-8036416022014074091contentContainer"
+                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                            <table align="left" width="100%"
+                                style="border-collapse:collapse;border-spacing:0;margin:0;padding:0">
+                                <tbody>
+                                    <tr>
+                                        <td height="12" width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td height="12" width="540"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td height="12" width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td height="12" width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td height="12" width="540"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td height="12" width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td align="left" width="540"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                            <table align="left" width="100%"
+                                                style="border-collapse:collapse;border-spacing:0;margin:0;padding:0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td
+                                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                                            <div style="margin-bottom:12px">
+                                                                <h1
+                                                                    style="font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;font-size:20px;font-weight:normal;margin:0;padding:0">
+                                                                    {{ email_title }}</h1>
+                                                            </div>
+                                                            <div style="margin-bottom:30px;font-size:14px">
+                                                                <p
+                                                                    style="font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;font-size:14px;margin:0;padding:0">
+                                                                    Berikut nomor pengiriman mu :  <span style="color: #DE6237">{{ fulfillment.tracking_numbers.first }}</span>
+                                                                </p>
+
+                                                            </div>
+                                                            <div style="margin-bottom:30px;font-size:14px">
+                                                                <p
+                                                                    style="font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;font-size:14px;margin:0;padding:0">
+                                                                    Status pengiriman dapat di check langsung pada <a href="https://cekresi.com" target="_blank">https://cekresi.com</a>
+                                                                </p>
+
+                                                            </div>
+                                                            <div style="margin-bottom:30px;font-size:14px">
+                                                                <p
+                                                                    style="font-family:&quot;Arial&quot;,sans-serif;color:#888;line-height:1.36;font-size:12px;margin:0;padding:0">
+                                                                    Jika dirasa belum sesuai langsung hubungi kami melalui:
+                                                                    <br />
+                                                                    WA 08777-5432-567
+                                                                    <br />
+                                                                    Customer service : 08777-5432-567(  08.00-16.00)
+                                                                </p>
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </td>
+                                        <td width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td height="30" width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td height="30" width="540"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                        <td height="30" width="30"
+                                            style="border-collapse:collapse;border-spacing:0;font-family:&quot;Arial&quot;,sans-serif;color:#333;line-height:1.36;margin:0;padding:0">
+                                        </td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
