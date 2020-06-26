@@ -150,7 +150,9 @@ class OrderController extends Controller
         $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
         $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
         $last_transaction = last($transactions);
-        $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        try {
+            $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        } catch (\Exception $e) { }
         $data->state = $order->state;
         
         return response(['data' => $data], 200);
