@@ -56,6 +56,7 @@ class CartController extends Controller
     public function createCart(Request $request)
     {
         $userId = $request->user()->id;
+        Cart::where('user_id', $request->user()->id)->delete();
         $cart = Cart::create([ 'user_id' => $userId, 'checkout_id' => $request->checkoutId]);
         return response(['data' => $cart], 200);
     }
