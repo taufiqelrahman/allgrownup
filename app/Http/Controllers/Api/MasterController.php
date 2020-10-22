@@ -40,7 +40,8 @@ class MasterController extends Controller
     public function bookPages(Request $request)
     {
         $ids = explode(',', $request->jobs);
-        $data = array_merge(array(13, 11), $ids, array(12, 14));
+        // $data = array_merge(array(13, 11), $ids, array(12, 14));
+        $data = array_merge(array(13, 11), $ids);
         $ids_ordered = implode(',', $data);
         $book_pages = BookContent::whereIn('occupation_id', $data)
                                 ->with('occupation')
