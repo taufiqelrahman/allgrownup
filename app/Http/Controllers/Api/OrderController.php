@@ -11,6 +11,7 @@ use App\User;
 use App\Guest;
 use App\Cart;
 use App\CartItem;
+use App\Printing;
 use App\Mail\OrderCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -270,6 +271,12 @@ class OrderController extends Controller
             $order = Order::where('order_number', 'WIGU-'.$request->order_number)->firstOrFail();
             $order->state_id = 2;
             $order->save();
+
+            // create printing object with order_id
+            $printing = new Printing;
+            $printing->order_id = $order->id;
+            $printing->printing_state = 'Order Confirmation';
+            $printing->save();
             return response(['data' => $order], 200);
         }, 5);
 
@@ -338,6 +345,29 @@ class OrderController extends Controller
         }, 5);
 
         return $response;
+    }
+
+    /**
+     * Display a listing of the resource.
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function list(Request $request)
+    {
+        $user_email = $request->user()->email;
+        $allOrders = app(ServiceController::class)->retrieveOrders()->orders;
+        $orders = [];
+        foreach ($allOrders as $order) {
+            if ($order->financial_status == 'paid') {
+                array_push($orders, $order);
+            }
+        }
+        $order_printing = Order::with('printings')
+                            ->has('printings')
+                            ->get();
+
+        return response(['data' => ['orders' => $orders, 'order_printing' => $order_printing]], 200);
     }
 
     /**

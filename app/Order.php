@@ -17,4 +17,8 @@ class Order extends Model
     {
         return $this->belongsTo('App\State');
     }
+    public function printings()
+    {
+        return $this->hasMany('App\Printing');
+    }
 }
