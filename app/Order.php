@@ -19,6 +19,6 @@ class Order extends Model
     }
     public function printings()
     {
-        return $this->hasMany('App\Printing');
+        return $this->hasOne('App\Printing');
     }
 }

@@ -371,6 +371,25 @@ class OrderController extends Controller
     }
 
     /**
+     * Update printing
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePrinting ($id, Request $request)
+    {
+        $isAdmin = $request->user()->is_admin;
+        if ($isAdmin) {
+            $printing = Printing::where('order_id', $id)->firstOrFail();
+            $printing->printing_state = $request->status;
+            $printing->source_path = $request->path;
+            $printing->save();
+            return response($printing, 200);
+        }
+        return response('Unauthorized', 401);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
