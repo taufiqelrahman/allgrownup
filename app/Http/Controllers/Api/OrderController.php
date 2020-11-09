@@ -359,7 +359,7 @@ class OrderController extends Controller
         $allOrders = app(ServiceController::class)->retrieveOrders()->orders;
         $orders = [];
         foreach ($allOrders as $order) {
-            if ($order->financial_status == 'paid') {
+            if ($order->financial_status == 'paid' && $order->fulfillment_status == null) {
                 array_push($orders, $order);
             }
         }
@@ -379,7 +379,7 @@ class OrderController extends Controller
     public function updatePrinting ($id, Request $request)
     {
         $isAdmin = $request->user()->is_admin;
-        if ($isAdmin) {
+        if ($isAdmin == 1) {
             $printing = Printing::where('order_id', $id)->firstOrFail();
             $printing->printing_state = $request->status;
             $printing->source_path = $request->path;

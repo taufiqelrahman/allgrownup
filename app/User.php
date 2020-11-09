@@ -16,6 +16,12 @@ class User extends Authenticatable
     use HasApiTokens, Notifiable;
 
     /**
+     * Admin Roles (is_admin)
+     * 1. Admin
+     * 2. Printing
+     */
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
