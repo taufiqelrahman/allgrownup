@@ -54,4 +54,20 @@ class ServiceController extends Controller
     $response = $this->guzzle->get($this->ADMIN_API_PATH.'/countries/244359069829/provinces.json');
     return json_decode($response->getBody()->getContents());
   }
+
+  public function fulfillOrder($id, $data)
+  {
+    $response = $this->guzzle->post($this->ADMIN_API_PATH.'/orders/'.$id.'/fulfillments.json', [
+      'json' => $data
+    ]);
+    return json_decode($response->getBody()->getContents());
+  }
+
+  public function updateFulfillment($id, $fulfillmentId, $data)
+  {
+    $response = $this->guzzle->put($this->ADMIN_API_PATH.'/orders/'.$id.'/fulfillments/'.$fulfillmentId.'.json', [
+      'json' => $data
+    ]);
+    return json_decode($response->getBody()->getContents());
+  }
 }

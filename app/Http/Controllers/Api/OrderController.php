@@ -348,6 +348,30 @@ class OrderController extends Controller
     }
 
     /**
+     * Fulfill shopify order.
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fulfill($id, Request $request)
+    {
+        $fulfillment = app(ServiceController::class)->fulfillOrder($id, $request->data)->fulfillment;
+        return response(['data' => $fulfillment], 200);
+    }
+
+    /**
+     * Update fulfillment of shopify order.
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateFulfillment($id, $fulfillmentId, Request $request)
+    {
+        $fulfillment = app(ServiceController::class)->updateFulfillment($id, $fulfillmentId, $request->data)->fulfillment;
+        return response(['data' => $fulfillment], 200);
+    }
+
+    /**
      * Display a listing of the resource.
      * for admin dashboard
      *
