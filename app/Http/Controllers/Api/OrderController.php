@@ -383,7 +383,7 @@ class OrderController extends Controller
         $allOrders = app(ServiceController::class)->retrieveOrders()->orders;
         $orders = [];
         foreach ($allOrders as $order) {
-            if ($order->financial_status == 'paid' && $order->fulfillment_status == null) {
+            if ($order->financial_status == 'paid') {
                 array_push($orders, $order);
             }
         }
