@@ -1,9 +1,4 @@
-{% capture email_title %}Hi {{ customer.first_name }}! Satu langkah lagi buku ceritamu akan kita cetak
-=D{% endcapture %}
-{% capture email_body %}
-Terima kasih telah membeli buku di When I Grow Up. Silakan melakukan pembayaran untuk transaksi {{name}}.Yuk periksa dulu
-detail ordernya!
-{% endcapture %}
+{% capture email_title %}Terdapat perubahan informasi pada pengirimanmu{% endcapture %}
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
@@ -117,11 +112,6 @@ detail ordernya!
 
     .text-body-14 {
       font-size: 14px;
-      line-height: 20px;
-    }
-
-    .text-body-16 {
-      font-size: 16px;
       line-height: 20px;
     }
 
@@ -257,8 +247,20 @@ detail ordernya!
                     style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
                     <tbody>
                       <tr style="padding:0;text-align:left;vertical-align:top">
-                        <th class="small-12 large-12 columns first last"
-                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px;padding-right:20px">
+                        <th class="small-12 large-4 columns first" width="30"
+                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px">
+                          <table
+                            style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                            <tbody>
+                              <tr style="padding:0;text-align:left;vertical-align:top">
+                                <th style="color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4">
+                                </th>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th class="small-12 large-4 columns"
+                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px">
                           <table
                             style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
                             <tbody>
@@ -287,8 +289,17 @@ detail ordernya!
                                     </tbody>
                                   </table>
                                 </th>
-                                <th class="expander"
-                                  style="color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;padding:0!important;visibility:hidden;width:0">
+                              </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th class="small-12 large-4 columns last" width="30"
+                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px;padding-right:20px">
+                          <table
+                            style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                            <tbody>
+                              <tr style="padding:0;text-align:left;vertical-align:top">
+                                <th style="color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4">
                                 </th>
                               </tr>
                             </tbody>
@@ -301,8 +312,20 @@ detail ordernya!
                     style="border-collapse:collapse;border-spacing:0;display:table;padding:0;position:relative;text-align:left;vertical-align:top;width:100%">
                     <tbody>
                       <tr style="padding:0;text-align:left;vertical-align:top">
-                        <th class="small-12 large-12 columns first last"
-                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px;padding-right:20px">
+                        <th class="small-12 large-4 columns first" width="30"
+                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px">
+                          <table
+                            style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                            <tbody>
+                              <tr style="padding:0;text-align:left;vertical-align:top">
+                                <th style="color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4">
+                                </th>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th class="small-12 large-4 columns"
+                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px">
                           <table
                             style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
                             <tbody>
@@ -321,7 +344,9 @@ detail ordernya!
                                     </tbody>
                                   </table>
                                   <div class="text-body-14" style="font-size:14px;font-weight:400;line-height:20px">
-                                    {{ email_body }}
+                                    Berikut nomor pengiriman mu: <span
+                                      style="color:#de6237">{{ fulfillment.tracking_numbers.first }}</span>
+                                    ({{ fulfillment.tracking_company }})
                                   </div>
                                   <table class="spacer"
                                     style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
@@ -333,97 +358,10 @@ detail ordernya!
                                       </tr>
                                     </tbody>
                                   </table>
-                                  <h2 class="text-body-16" style="font-size:16px;line-height:20px">Detail Tagihan</h2>
-                                  <div style="border-bottom:2px solid #eee;font-weight:400;height:1px!important"></div>
-                                  <table class="spacer"
-                                    style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
-                                    <tbody>
-                                      <tr style="padding:0;text-align:left;vertical-align:top">
-                                        <td height="18"
-                                          style="-moz-hyphens:auto;-webkit-hyphens:auto;border-collapse:collapse!important;color:#141414;font-family:'Open Sans',sans-serif!important;font-size:18px;hyphens:auto;line-height:18px;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
-                                          &nbsp;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <div class="text-body-14"
-                                    style="color:#999!important;font-size:14px;font-weight:400;line-height:20px">
-                                    No. Transaksi
-                                  </div>
-                                  <div class="text-subheading-20"
-                                    style="font-size:20px;font-weight:500!important;line-height:26px">{{ name }}</div>
-                                  <table class="spacer"
-                                    style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
-                                    <tbody>
-                                      <tr style="padding:0;text-align:left;vertical-align:top">
-                                        <td height="24"
-                                          style="-moz-hyphens:auto;-webkit-hyphens:auto;border-collapse:collapse!important;color:#141414;font-family:'Open Sans',sans-serif!important;font-size:24px;hyphens:auto;line-height:24px;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
-                                          &nbsp;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <div class="text-body-14"
-                                    style="color:#999!important;font-size:14px;font-weight:400;line-height:20px">
-                                    Total harga
-                                  </div>
-                                  <div class="text-subheading-20"
-                                    style="font-size:20px;font-weight:500!important;line-height:26px">
-                                    {{ total_price | money_with_currency }}
-                                  </div>
-                                  <table class="spacer"
-                                    style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
-                                    <tbody>
-                                      <tr style="padding:0;text-align:left;vertical-align:top">
-                                        <td height="18"
-                                          style="-moz-hyphens:auto;-webkit-hyphens:auto;border-collapse:collapse!important;color:#141414;font-family:'Open Sans',sans-serif!important;font-size:18px;hyphens:auto;line-height:18px;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
-                                          &nbsp;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <div style="border-bottom:2px solid #eee;font-weight:400;height:1px!important"></div>
-                                  <table class="spacer"
-                                    style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
-                                    <tbody>
-                                      <tr style="padding:0;text-align:left;vertical-align:top">
-                                        <td height="18"
-                                          style="-moz-hyphens:auto;-webkit-hyphens:auto;border-collapse:collapse!important;color:#141414;font-family:'Open Sans',sans-serif!important;font-size:18px;hyphens:auto;line-height:18px;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
-                                          &nbsp;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <h2 class="text-body-16" style="font-size:16px;line-height:20px">Petunjuk Pembayaran:
-                                  </h2>
                                   <div class="text-body-14" style="font-size:14px;font-weight:400;line-height:20px">
-                                    Rincian pembayaran dapat dilihat di halaman
-                                    <a href="https://whenigrowup.co.id/orders/" class="text-body-14"
-                                      style="color:#d71149!important;font-family:'Open Sans',sans-serif!important;font-size:14px;line-height:20px;text-decoration:none"
-                                      target="_blank">
-                                      ini
-                                    </a>.
-                                  </div>
-                                  <table class="spacer"
-                                    style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
-                                    <tbody>
-                                      <tr style="padding:0;text-align:left;vertical-align:top">
-                                        <td height="18"
-                                          style="-moz-hyphens:auto;-webkit-hyphens:auto;border-collapse:collapse!important;color:#141414;font-family:'Open Sans',sans-serif!important;font-size:18px;hyphens:auto;line-height:18px;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
-                                          &nbsp;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <div style="border-bottom:2px solid #eee;font-weight:400;height:1px!important"></div>
-                                  <table class="spacer"
-                                    style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
-                                    <tbody>
-                                      <tr style="padding:0;text-align:left;vertical-align:top">
-                                        <td height="18"
-                                          style="-moz-hyphens:auto;-webkit-hyphens:auto;border-collapse:collapse!important;color:#141414;font-family:'Open Sans',sans-serif!important;font-size:18px;hyphens:auto;line-height:18px;mso-line-height-rule:exactly;padding:0;text-align:left;vertical-align:top;word-wrap:break-word">
-                                          &nbsp;</td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                  <div class="text-body-14" style="font-size:14px;font-weight:400;line-height:20px">
-                                    Apakah sudah sesuai? Jika sudah sesuai ditunggu untuk pembayarannya ya! Dalam waktu
-                                    1x24 jam akan kami tunggu pembayarannya. Diluar waktu itu akan kita batalkan.
+                                    Status pengiriman dapat di check langsung pada <a href="https://cekresi.com"
+                                      target="_blank"
+                                      style="color:#2b4ac7;font-family:'Open Sans',sans-serif!important;line-height:1.4;text-decoration:none">Cekresi</a>.
                                   </div>
                                   <table class="spacer"
                                     style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
@@ -454,8 +392,17 @@ detail ordernya!
                                     </tbody>
                                   </table>
                                 </th>
-                                <th class="expander"
-                                  style="color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;padding:0!important;visibility:hidden;width:0">
+                              </tr>
+                            </tbody>
+                          </table>
+                        </th>
+                        <th class="small-12 large-4 columns last" width="30"
+                          style="Margin:0 auto;color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4;margin:0 auto;padding-left:20px;padding-right:20px">
+                          <table
+                            style="border-collapse:collapse;border-spacing:0;padding:0;text-align:left;vertical-align:top;width:100%">
+                            <tbody>
+                              <tr style="padding:0;text-align:left;vertical-align:top">
+                                <th style="color:#141414;font-family:'Open Sans',sans-serif!important;line-height:1.4">
                                 </th>
                               </tr>
                             </tbody>
