@@ -10,12 +10,13 @@ class Printing extends Model
     /**
      * 
      * PRINTING STATE MACHINE
-     * 1. order confirmation
-     * 2. Prepress approval
-     * 3. In production
-     * 4. QC
-     * 5. Waiting shipment
-     * 6. Done
+     * 1. Preparation PDF (Dhana)
+     * 2. In progress (Dhana)
+     * 3. QC PDF (Riyan)
+     * 4. In progress (Riyan)
+     * 5. Printing & shipping (Fariz)
+     * 6. In progress (Fariz)
+     * 7. Done (Input resi)
      * 
      */
     use SoftDeletes;
