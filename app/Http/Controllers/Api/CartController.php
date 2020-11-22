@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Cart;
 use App\CartItem;
+use App\User;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -50,5 +51,13 @@ class CartController extends Controller
             return response(['data' => $cart->with('cartItems')->first()], 200);
         }, 5);
         return $response;
+    }
+
+    public function createCart(Request $request)
+    {
+        $userId = $request->user()->id;
+        Cart::where('user_id', $request->user()->id)->delete();
+        $cart = Cart::create([ 'user_id' => $userId, 'checkout_id' => $request->checkoutId]);
+        return response(['data' => $cart], 200);
     }
 }

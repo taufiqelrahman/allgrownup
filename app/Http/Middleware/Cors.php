@@ -15,9 +15,15 @@ class Cors
      */
     public function handle($request, Closure $next)
     {
-        header('Access-Control-Allow-Origin:  '.env('CLIENT_URL'));
+        $origin = $request->headers->get('origin');
+        if ($origin == env('CLIENT_URL')) {
+            header('Access-Control-Allow-Origin:  '.env('CLIENT_URL'));
+        }
+        if ($origin == env('ADMIN_URL')) {
+            header('Access-Control-Allow-Origin:  '.env('ADMIN_URL'));
+        }
         header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Authorization, Origin');
-        header('Access-Control-Allow-Methods:  POST, PUT');
+        header('Access-Control-Allow-Methods:  POST, PUT, PATCH');
         return $next($request);
     }
 }

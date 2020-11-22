@@ -14,7 +14,7 @@ class MidtransController extends Controller
     {
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
         // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isProduction = true;
         // Set sanitization on (default)
         // \Midtrans\Config::$isSanitized = true;
         // Set 3DS transaction for credit card to true
@@ -84,7 +84,8 @@ class MidtransController extends Controller
 
     public function getTransaction($order_number)
     {
-        $status = \Midtrans\Transaction::status(201900000068);
+        // $status = \Midtrans\Transaction::status(201900000068);
+        $status = \Midtrans\Transaction::status($order_number);
         return $status;
     }
 }

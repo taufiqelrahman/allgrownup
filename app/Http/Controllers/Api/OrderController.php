@@ -5,25 +5,19 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Order;
 use App\OrderItem;
+use App\Child;
 use App\Address;
 use App\User;
+use App\Guest;
 use App\Cart;
 use App\CartItem;
+use App\Printing;
 use App\Mail\OrderCreated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
-    protected $guzzle;
-    public function __construct()
-    {
-        $this->guzzle = new \GuzzleHttp\Client([
-            'base_uri' => 'https://elrahman.myshopify.com',
-            'headers' => ['X-Shopify-Access-Token' => '944c15a82bd703a3483a6ba91ea6c6e4'],
-        ]);
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -31,15 +25,20 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        // $orders = Order::where('user_id', $request->user()->id)->get();
-        $data = array();
-        // foreach($orders as $order)
-        // {
-            // $response = $client->get('https://elrahman.myshopify.com/admin/api/2019-10/orders/' . $order->id . '.json');
-            $response = $this->guzzle->get('/admin/api/2019-10/orders/1927926055052.json');
-            array_push($data, json_decode($response->getBody()->getContents())->order);
-        // }
-        return response(['data' => $data], 200);
+        $user_email = $request->user()->email;
+        $allOrders = app(ServiceController::class)->retrieveOrders()->orders;
+        // $orders = array_values(array_filter($allOrders, function ($order) use($user_email) {
+        //     return ($order->email == $user_email);
+        // }));
+        $orders = [];
+        foreach ($allOrders as $order) {
+            if ($order->email == $user_email) {
+                array_push($orders, $order);
+            }
+        }
+        $order_states = Order::with('state')->get();
+        // $data->checkouts = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
+        return response(['data' => ['orders' => $orders, 'order_states' => $order_states]], 200);
     }
 
     /**
@@ -111,50 +110,312 @@ class OrderController extends Controller
         return response(['data' => $order], 200);
     }
 
-    public function showDetail($order_number)
+    /**
+     * Display the specified order.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showDetail(Request $request, $order_number)
     {
-        $order = Order::where('order_number', $order_number)->with('orderItems')->first();
-        $order->midtrans_status = app(MidtransController::class)->getTransaction($order_number);
-        return response(
-            ['data' => $order], 200);
+        $user_id = $request->user()->id;
+        $order = Order::where('user_id', $user_id)
+                        ->where('order_number', $order_number)
+                        ->with('state')
+                        ->firstOrFail();
+        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
+        $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
+        $last_transaction = last($transactions);
+        try {
+            $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        } catch (\Exception $e) { }
+
+        $data->state = $order->state;
+        // $data = app(ServiceController::class)->retrieveOrderById(2079230722181);
+        
+        return response(['data' => $data], 200);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Display the specified order for guest.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showGuestDetail($order_number)
+    {
+        $order = Order::whereNull('user_id')
+                        ->where('order_number', $order_number)
+                        ->with('state')
+                        ->firstOrFail();
+        $data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id);
+        $transactions = app(ServiceController::class)->retrieveTransactionById($order->shopify_order_id)->transactions;
+        $last_transaction = last($transactions);
+        try {
+            $data->payment = app(MidtransController::class)->getTransaction($last_transaction->authorization);
+        } catch (\Exception $e) { }
+        $data->state = $order->state;
+        
+        return response(['data' => $data], 200);
+    }
+
+    /**
+     * Display the specified abandoned checkouot.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showCheckout($checkout_id)
+    {
+        $data = app(ServiceController::class)->retrieveAbandonedCheckouts()->checkouts;
+        $checkout = collect($data)->first(function ($value, $key) use ($checkout_id) {
+            return $value->id == $checkout_id;
+        });
+        
+        return response(['data' => $checkout], 200);
+    }
+
+    /**
+     * [Webhook] Create the resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function webhookCreate(Request $request)
     {
+        $request = json_decode($request->getContent());
         $response = \DB::transaction(function() use ($request) {
-            $order = Order::where('order_number', $request->order_id)->first();
-            switch($request->transaction_status)
-            {
-                case 'pending';
-                    $order->status = 2;
-                    $order->payment_type = $request->payment_type;
-                    break;
-                case 'settlement';
-                case 'capture';
-                    $order->status = 3;
-                    break;
-                case 'sent';
-                    $order->status = 4;
-                    $order->shipping_number = $request->shipping_number;
-                    break;
-                case 'expire';
-                    $order->status = 5;
-                    break;
-                default;
-                    break;
+            $isGuest = false;
+            $user = User::with('address')->where('email', $request->email)->first();
+            if (!isset($user)) {
+                $user = new Guest;
+                $user->name = $request->shipping_address->name;
+                $user->email = $request->email;
+                $user->phone = $request->shipping_address->phone;
+                $user->save();
+                $isGuest = true;
             }
+            // save address
+            if (isset($user->address))
+            {
+                $address = $user->address;
+            } else {
+                $address = new Address;
+            }
+            $shipping_address = $request->shipping_address;
+            $unallowed_props = ['company', 'latitude', 'longitude', 'name', 'country_code', 'province_code'];
+            foreach ($shipping_address as $key => $value) {
+                if (in_array($key, $unallowed_props)) {
+                    unset($shipping_address->$key);
+                }
+            }
+            $address->fill((array) $shipping_address);
+            $address->save();
+            $user->address_id = $address->id;
+            $user->save();
+            // save order
+            $order = new Order;
+            $order->shopify_order_id = $request->id;
+            if ($isGuest) {
+                $order->guest_id = $user->id;
+            } else {
+                $order->user_id = $user->id;
+            }
+            $order->state_id = 1;
+            $order->order_number = str_replace('#', '', $request->name);
             $order->save();
-            return response(['data' => $order->with('orderItems')->findOrFail($order->id)], 200);
+            // save child data
+            $shopify_data = app(ServiceController::class)->retrieveOrderById($order->shopify_order_id)->order;
+            foreach ($shopify_data->line_items as $data) {
+                $child_data = (object)[];
+                foreach ($data->properties as $prop)
+                {
+                    $child_data->{$prop->name} = $prop->value;
+                }
+                $child = new Child;
+                $child->order_id = $order->id;
+                $child->name = $child_data->Name;
+                $child->cover = $child_data->Cover;
+                $child->gender = $child_data->Gender;
+                $child->age = $child_data->Age;
+                $child->skin = $child_data->Skin;
+                $child->hair = $child_data->Hair;
+                // $child->birthdate = $child_data->{'Date of Birth'};
+                $child->message = $child_data->Dedication;
+                $child->language = $child_data->Language;
+                $child->occupations = $child_data->Occupations;
+                $child->save();
+            }
+            // delete cart
+            $cart = Cart::where('user_id', $user->id)->delete();
+            // $cart->delete();
+            // Mail::to($user)->queue(new OrderCreated($order));
+            return response(['data' => $order], 200);
         }, 5);
 
         return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookPaid(Request $request)
+    {
+        $request = json_decode($request->getContent());
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('order_number', 'WIGU-'.$request->order_number)->firstOrFail();
+            $order->state_id = 2;
+            $order->save();
+
+            // create printing object with order_id
+            $printing = new Printing;
+            $printing->order_id = $order->id;
+            $printing->printing_state = 'Preparation PDF (Dhana)';
+            $printing->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookSent(Request $request)
+    {
+        $request = json_decode($request->getContent());
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('order_number', 'WIGU-'.$request->order_number)->firstOrFail();
+            $order->state_id = 3;
+            $order->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookCancelled(Request $request)
+    {
+        $request = json_decode($request->getContent());
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('shopify_order_id', $request->id)->firstOrFail();
+            $order->state_id = 6;
+            $order->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * [Webhook] Update the resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function webhookRefunded(Request $request)
+    {
+        $request = json_decode($request->getContent());
+        $response = \DB::transaction(function() use ($request) {
+            $order = Order::where('shopify_order_id', $request->id)->firstOrFail();
+            if ($request->financial_status == 'partially_refunded') {
+                $order->state_id = 7;
+            } else {
+                $order->state_id = 8;
+            }
+            $order->save();
+            return response(['data' => $order], 200);
+        }, 5);
+
+        return $response;
+    }
+
+    /**
+     * Fulfill shopify order.
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function fulfill($id, Request $request)
+    {
+        $fulfillment = app(ServiceController::class)->fulfillOrder($id, $request->data)->fulfillment;
+        return response(['data' => $fulfillment], 200);
+    }
+
+    /**
+     * Update fulfillment of shopify order.
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateFulfillment($id, $fulfillmentId, Request $request)
+    {
+        $fulfillment = app(ServiceController::class)->updateFulfillment($id, $fulfillmentId, $request->data)->fulfillment;
+        return response(['data' => $fulfillment], 200);
+    }
+
+    /**
+     * Display a listing of the resource.
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function list(Request $request)
+    {
+        $user_email = $request->user()->email;
+        $allOrders = app(ServiceController::class)->retrieveOrders()->orders;
+        $orders = [];
+        foreach ($allOrders as $order) {
+            if ($order->financial_status == 'paid') {
+                array_push($orders, $order);
+            }
+        }
+        $order_printing = Order::with('printings')
+                            ->has('printings')
+                            ->get();
+
+        return response(['data' => ['orders' => $orders, 'order_printing' => $order_printing]], 200);
+    }
+
+    /**
+     * Update printing
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePrinting ($id, Request $request)
+    {
+        $isAdmin = $request->user()->is_admin;
+        if ($isAdmin == 1) {
+            $printing = Printing::where('order_id', $id)->firstOrFail();
+            if ($request->status != $printing->printing_state) {
+                $new_note = $request->status.':'.date('Y-m-d H:i:s');
+                if ($printing->note != '') $new_note = '<br>'.$new_note;
+                $printing->note = $printing->note.$new_note;
+            }
+            $printing->printing_state = $request->status;
+            $printing->source_path = $request->path;
+            $printing->save();
+            return response($printing, 200);
+        }
+        return response('Unauthorized', 401);
     }
 
     /**

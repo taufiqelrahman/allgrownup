@@ -10,6 +10,11 @@ php artisan migrate
 php artisan passport:install
 ```
 
+### Run queue worker
+```bash
+php artisan queue:work
+```
+
 ## Usage
 
 ```bash

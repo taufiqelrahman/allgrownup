@@ -13,14 +13,14 @@ class CreateProductImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_images', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('product_id');
-            $table->string('filepath');
-            $table->timestamps();
-            $table->foreign('product_id')
-                ->references('id')->on('products');
-        });
+        // Schema::create('product_images', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->unsignedBigInteger('product_id');
+        //     $table->string('filepath');
+        //     $table->timestamps();
+        //     $table->foreign('product_id')
+        //         ->references('id')->on('products');
+        // });
     }
 
     /**
