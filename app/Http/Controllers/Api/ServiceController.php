@@ -32,7 +32,7 @@ class ServiceController extends Controller
   public function retrieveOrders()
   {
     $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders.json', [
-      'query' => ['status' => 'any']
+      'query' => ['status' => 'any', 'limit' => '250']
     ]);
     return json_decode($response->getBody()->getContents());
   }
