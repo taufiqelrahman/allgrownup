@@ -410,8 +410,12 @@ class OrderController extends Controller
                 if ($printing->note != '') $new_note = '<br>'.$new_note;
                 $printing->note = $printing->note.$new_note;
             }
-            $printing->printing_state = $request->status;
-            $printing->source_path = $request->path;
+            if (isset($request->status)) {
+                $printing->printing_state = $request->status;
+            }
+            if (isset($request->path)) {
+                $printing->source_path = $request->path;
+            }
             $printing->save();
             return response($printing, 200);
         }
