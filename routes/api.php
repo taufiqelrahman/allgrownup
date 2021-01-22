@@ -63,6 +63,8 @@ Route::group(['middleware' => ['json.response']], function () {
         /**
          * Dashboard Routes
          */
+        Route::get('children', 'Api\ChildrenController@list')->name('children.list');
+
         Route::get('orderslist', 'Api\OrderController@list')->name('order.list');
         Route::patch('orderslist/{id}', 'Api\OrderController@updatePrinting')->name('update.printing');
         Route::post('orders/{id}/fulfill', 'Api\OrderController@fulfill')->name('order.fulfill');
