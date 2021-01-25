@@ -403,14 +403,14 @@ class OrderController extends Controller
     public function updatePrinting ($id, Request $request)
     {
         $isAdmin = $request->user()->is_admin;
-        if ($isAdmin == 1) {
+        if ($isAdmin == 1 || $isAdmin == 2) {
             $printing = Printing::where('order_id', $id)->firstOrFail();
-            if ($request->status != $printing->printing_state) {
-                $new_note = $request->status.':'.date('Y-m-d H:i:s');
-                if ($printing->note != '') $new_note = '<br>'.$new_note;
-                $printing->note = $printing->note.$new_note;
-            }
             if (isset($request->status)) {
+                if ($request->status != $printing->printing_state) {
+                    $new_note = $request->status.':'.date('Y-m-d H:i:s');
+                    if ($printing->note != '') $new_note = '<br>'.$new_note;
+                    $printing->note = $printing->note.$new_note;
+                }
                 $printing->printing_state = $request->status;
             }
             if (isset($request->path)) {
