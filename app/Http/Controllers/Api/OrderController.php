@@ -275,7 +275,7 @@ class OrderController extends Controller
             // create printing object with order_id
             $printing = new Printing;
             $printing->order_id = $order->id;
-            $printing->printing_state = 'Preparation PDF (Dhana)';
+            $printing->printing_state = 'PREP';
             $printing->save();
             return response(['data' => $order], 200);
         }, 5);

@@ -10,13 +10,16 @@ class Printing extends Model
     /**
      * 
      * PRINTING STATE MACHINE
-     * 1. Preparation PDF (Dhana)
-     * 2. In progress (Dhana)
-     * 3. QC PDF (Riyan)
-     * 4. In progress (Riyan)
-     * 5. Printing & shipping (Fariz)
-     * 6. In progress (Fariz)
-     * 7. Done (Input resi)
+     * - Preparation PDF
+     * - In progress
+     * - QC PDF
+     * - In progress
+     * - PDF ready
+     * - Layouting
+     * - Printing & Shipping
+     * - Done (Input resi)
+     * - Retur in progress
+     * - Retur terkirim
      * 
      */
     use SoftDeletes;
