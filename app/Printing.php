@@ -24,6 +24,7 @@ class Printing extends Model
         'order_id',
         'printing_state',
         'source_path',
-        'note'
+        'note',
+        'assignee'
     ];
 }

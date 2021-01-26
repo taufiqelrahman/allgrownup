@@ -407,7 +407,8 @@ class OrderController extends Controller
             $printing = Printing::where('order_id', $id)->firstOrFail();
             if (isset($request->status)) {
                 if ($request->status != $printing->printing_state) {
-                    $new_note = $request->status.':'.date('Y-m-d H:i:s');
+                    $actor = isset($printing->assignee) && $printing->assignee != 'unassigned' ? ' by '.$printing->assignee : '';
+                    $new_note = $request->status.$actor.':'.date('Y-m-d H:i:s');
                     if ($printing->note != '') $new_note = '<br>'.$new_note;
                     $printing->note = $printing->note.$new_note;
                 }
@@ -415,6 +416,18 @@ class OrderController extends Controller
             }
             if (isset($request->path)) {
                 $printing->source_path = $request->path;
+            }
+            if (isset($request->assignee)) {
+                if ($request->assignee != $printing->assignee) {
+                    if ($request->assignee == 'unassigned') {
+                        $new_note = 'Has been unassigned:'.date('Y-m-d H:i:s');
+                    } else {
+                        $new_note = 'Assigned to '.$request->assignee.':'.date('Y-m-d H:i:s');
+                    }
+                    if ($printing->note != '') $new_note = '<br>'.$new_note;
+                    $printing->note = $printing->note.$new_note;
+                }
+                $printing->assignee = $request->assignee;
             }
             $printing->save();
             return response($printing, 200);
