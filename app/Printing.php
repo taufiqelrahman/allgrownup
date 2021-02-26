@@ -28,6 +28,7 @@ class Printing extends Model
         'printing_state',
         'source_path',
         'note',
-        'assignee'
+        'assignee',
+        'fulfilled_at'
     ];
 }

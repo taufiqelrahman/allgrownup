@@ -411,6 +411,10 @@ class OrderController extends Controller
                     $new_note = $request->status.$actor.':'.date('Y-m-d H:i:s');
                     if ($printing->note != '') $new_note = '<br>'.$new_note;
                     $printing->note = $printing->note.$new_note;
+
+                    if($request->status == "DONE") {
+                        $printing->fulfilled_at = date("Y-m-d H:i:s");
+                    }
                 }
                 $printing->printing_state = $request->status;
             }
