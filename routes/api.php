@@ -66,6 +66,7 @@ Route::group(['middleware' => ['json.response']], function () {
         Route::get('children', 'Api\ChildrenController@list')->name('children.list');
 
         Route::get('orderslist', 'Api\OrderController@list')->name('order.list');
+        Route::post('orderslist/dates', 'Api\OrderController@listWithDates')->name('order.list.dates');
         Route::patch('orderslist/{id}', 'Api\OrderController@updatePrinting')->name('update.printing');
         Route::post('orders/{id}/fulfill', 'Api\OrderController@fulfill')->name('order.fulfill');
         Route::put('orders/{id}/fulfillment/{fulfillmentId}', 'Api\OrderController@updateFulfillment')->name('order.update.fulfillment');

@@ -37,6 +37,19 @@ class ServiceController extends Controller
     return json_decode($response->getBody()->getContents());
   }
 
+  public function retrieveOrdersWithDates($minDate, $maxDate)
+  {
+    $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders.json', [
+      'query' => [
+        'status' => 'any',
+        'limit' => '250',
+        'created_at_min' => $minDate,
+        'created_at_max' => $maxDate
+      ]
+    ]);
+    return json_decode($response->getBody()->getContents());
+  }
+
   public function retrieveOrderById($id)
   {
     $response = $this->guzzle->get($this->ADMIN_API_PATH.'/orders/'.$id.'.json');

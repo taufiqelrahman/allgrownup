@@ -395,6 +395,34 @@ class OrderController extends Controller
     }
 
     /**
+     * Display a listing of the resource with dates
+     * for admin dashboard
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listWithDates(Request $request)
+    {
+        $user_email = $request->user()->email;
+        $dateFormat = 'Y-m-d H:i:s';
+        $monthYear = $request->year.'-'.$request->month;
+        $orders1 = app(ServiceController::class)->retrieveOrdersWithDates(date($dateFormat, strtotime($monthYear."-01")), date($dateFormat, strtotime($monthYear."-10")))->orders;
+        $orders2 = app(ServiceController::class)->retrieveOrdersWithDates(date($dateFormat, strtotime($monthYear."-11")), date($dateFormat, strtotime($monthYear."-20")))->orders;
+        $orders3 = app(ServiceController::class)->retrieveOrdersWithDates(date($dateFormat, strtotime($monthYear."-21")), date($dateFormat, strtotime($monthYear."-31")))->orders;
+        $allOrders = array_merge($orders1, $orders2, $orders3);
+        $orders = [];
+        foreach ($allOrders as $order) {
+            if ($order->financial_status == 'paid') {
+                array_push($orders, $order);
+            }
+        }
+        $order_printing = Order::with('printings')
+                            ->has('printings')
+                            ->get();
+
+        return response(['data' => ['orders' => $orders, 'order_printing' => $order_printing]], 200);
+    }
+
+    /**
      * Update printing
      * for admin dashboard
      *
